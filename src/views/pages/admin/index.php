@@ -21,3 +21,5 @@
 <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
+
+<?php $render('/admin', 'footer');?>

@@ -2,7 +2,7 @@
 namespace src;
 
 class Config {
-    const BASE_DIR = '/ecommerce';
+    const BASE_DIR = '/ecommerce/public';
 
     const DB_DRIVER = 'mysql';
     const DB_HOST = 'localhost';
