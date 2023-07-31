@@ -6,6 +6,7 @@ use \core\Controller;
 class HomeController extends Controller {
 
     public function index() {
-        $this->render('site/home', ['nome' => 'Bonieky']);
+        
+        $this->render('site/index');
     }
 }
