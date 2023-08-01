@@ -2,9 +2,9 @@
 namespace src\controllers;
 
 use \core\Controller;
-use \src\handlers\LoginHandler;
+use \src\handlers\UserHandler;
 
-class LoginController extends Controller {
+class UserController extends Controller {
 
     /*Page*/
     public function signin(){
@@ -33,7 +33,7 @@ class LoginController extends Controller {
 
         if($login && $password){
 
-            $dataUser = LoginHandler::verifyLogin($login, $password);
+            $dataUser = UserHandler::verifyLogin($login, $password);
 
             if($dataUser['token'] && $dataUser['admin'] === 1){
                 $_SESSION['token'] = $dataUser['token'];
@@ -47,10 +47,5 @@ class LoginController extends Controller {
         }
     }
 
-    public function logout(){
-        if(!empty($_SESSION['token'])){
-            $_SESSION['token'] = '';
-            $this->redirect('/admin/login');
-        }
-    }
+    
 }

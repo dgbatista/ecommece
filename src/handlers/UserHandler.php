@@ -3,7 +3,7 @@ namespace src\handlers;
 
 use \src\models\User;
 
-class LoginHandler {
+class UserHandler {
 
     public static function checkLogin() {
         if(!empty($_SESSION['token'])) {
@@ -14,7 +14,9 @@ class LoginHandler {
 
                 $loggedUser = new User();
                 $loggedUser->iduser = $data['iduser'];
+                $loggedUser->deslogin = $data['deslogin'];
                 $loggedUser->inadmin = $data['inadmin'];
+                $loggedUser->token = $data['token'];
 
                 return $loggedUser;
             }
@@ -43,6 +45,35 @@ class LoginHandler {
         }
 
         return false;
-
     }
+
+    public static function getAllUsers(){
+        $userList = User::select()
+            ->join('persons', 'users.iduser', '=' , 'persons.idperson')
+            ->orderBy('deslogin')
+        ->get();
+        $users = [];
+
+        if($userList) {
+            foreach($userList as $data){
+            
+                $user = new User();
+                $user->iduser = $data['iduser'];
+                $user->idperson = $data['idperson'];
+                $user->deslogin = $data['deslogin'];
+                $user->inadmin = $data['inadmin'];
+                $user->dtregisterty = $data['dtregister'];
+                $user->desperson = $data['desperson'];
+                $user->desemail = $data['desemail'];
+                $user->nrphone = $data['nrphone'];
+    
+                $users[] = $user;
+            }
+
+            return $users;
+        }
+
+        return false;
+    }
+ 
 }
