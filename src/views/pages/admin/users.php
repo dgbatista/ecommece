@@ -45,8 +45,8 @@
                       <td><?=$user->deslogin;?></td>
                       <td><?=($user->inadmin == 1) ?'Sim' : 'Não'?></td>
                       <td>
-                        <a href="<?=$base;?>/admin/users/{$value.iduser}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Editar</a>
-                        <a href="<?=$base;?>/admin/users/{$value.iduser}/delete" onclick="return confirm('Deseja realmente excluir este registro?')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> Excluir</a>
+                        <a href="<?=$base;?>/admin/users/<?=$user->iduser;?>/edit" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Editar</a>
+                        <a href="<?=$base;?>/admin/users/<?=$user->iduser;?>/delete" onclick="return confirm('Deseja realmente excluir este registro?')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> Excluir</a>
                       </td>
                     </tr>
                     <?php endforeach;?>

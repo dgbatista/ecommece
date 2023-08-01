@@ -47,5 +47,26 @@ class UserController extends Controller {
         }
     }
 
+    public function edit($args){
+        $id = $args['id'];
+
+        echo $id;
+        exit;
+    }
+
+    public function delete($args){
+        $id = $args['id'];
+
+        echo $id;
+        exit;
+    }
+    
+    public function create(){
+
+        $this->render('admin/header');
+        $this->render('admin/users-create');
+        $this->render('admin/footer');
+
+    }    
     
 }
