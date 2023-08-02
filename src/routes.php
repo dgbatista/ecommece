@@ -19,6 +19,7 @@ $router->get('/admin', 'AdminController@index');
 $router->get('/admin/users/{id}/delete', 'UserController@delete');
 $router->get('/admin/users/{id}/edit', 'UserController@edit');
 $router->get('/admin/users/create', 'UserController@create');
+$router->post('/admin/users/create', 'UserController@createAction');
 $router->get('/admin/users', 'AdminController@users' );
 
 $router->get('/admin/logout', 'AdminController@logout');

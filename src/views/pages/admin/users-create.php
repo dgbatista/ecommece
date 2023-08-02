@@ -2,6 +2,9 @@
 <div class="content-wrapper">
 <!-- Content Header (Page header) -->
 <section class="content-header">
+    <?php if(!empty($flash)): ?>
+      <div class="alert alert-danger" role="alert"><?php echo $flash; ?></div> 
+    <?php endif;?>
   <h1>
     Lista de Usuários
   </h1>
@@ -23,7 +26,7 @@
         </div>
         <!-- /.box-header -->
         <!-- form start -->
-        <form role="form" action="/admin/users/create" method="post">
+        <form role="form" action="<?=$base?>/admin/users/create" method="post">
           <div class="box-body">
             <div class="form-group">
               <label for="desperson">Nome</label>

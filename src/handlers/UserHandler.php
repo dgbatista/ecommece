@@ -2,6 +2,7 @@
 namespace src\handlers;
 
 use \src\models\User;
+use \src\models\Person;
 
 class UserHandler {
 
@@ -72,8 +73,29 @@ class UserHandler {
 
             return $users;
         }
-
         return false;
     }
+
+    public static function validateEmail($email){
+        $user = Person::select()->where('desemail', $email)->get();
+
+        if(count($user) > 0){
+            return $user;
+        }
+        
+        return false;
+    }
+
+    public static function validateLogin($login){
+        $user = User::select()->where('deslogin', $login)->get();
+
+        if(count($user) > 0){
+            return $user;
+        }
+        
+        return false;
+    }
+
+
  
 }
