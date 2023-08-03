@@ -18,4 +18,11 @@ class HomeController extends Controller {
     public function index() {
         $this->render('site/index');
     }
+
+    public function logout(){
+        if(!empty($_SESSION['token'])){
+            $_SESSION['token'] = '';
+            $this->redirect('/admin/login');
+        }
+    }
 }

@@ -20,29 +20,5 @@ class AdminController extends Controller {
         $this->render('admin/header');        
         $this->render('admin/index');
         $this->render('admin/footer');
-    }
-
-    public function users(){
-        $loggedUser = UserHandler::checkLogin();
-        $users = UserHandler::getAllUsers();
-
-        if($loggedUser->token && $loggedUser->inadmin === 1){
-
-            $this->render('admin/header');
-            $this->render('admin/users', [
-                'users'=> $users
-            ]);
-            $this->render('admin/footer');
-
-        } else {
-            $this->redirect('/admin/login');
-        }
-    }
-
-    public function logout(){
-        if(!empty($_SESSION['token'])){
-            $_SESSION['token'] = '';
-            $this->redirect('/admin/login');
-        }
-    }
+    }    
 }

@@ -14,7 +14,7 @@ class UserController extends Controller {
     public function sigup(){
         echo 'cadastro';
     }
-
+    
     /*Admin*/
     public function admin_signin(){
         $flash = '';
@@ -25,6 +25,23 @@ class UserController extends Controller {
         $this->render('admin/login', [
             'flash' => $flash
         ]);
+    }
+
+    public function users(){
+        $loggedUser = UserHandler::checkLogin();
+        $users = UserHandler::getAllUsers();
+
+        if($loggedUser->token && $loggedUser->inadmin === 1){
+
+            $this->render('admin/header');
+            $this->render('admin/users', [
+                'users'=> $users
+            ]);
+            $this->render('admin/footer');
+
+        } else {
+            $this->redirect('/admin/login');
+        }
     }
 
     public function signin_action(){
@@ -67,12 +84,12 @@ class UserController extends Controller {
             $flash = $_SESSION['flash'];
             $_SESSION['flash'] = '';
         }
-        $this->render('admin/create', [
-            'flash' => $flash
-        ]);
+        $this->render('admin/create');
         
         $this->render('admin/header');
-        $this->render('admin/users-create');
+        $this->render('admin/users-create', [
+            'flash' => $flash
+        ]);
         $this->render('admin/footer');
 
     }    
@@ -83,10 +100,8 @@ class UserController extends Controller {
         $nrphone = filter_input(INPUT_POST, 'nrphone');
         $desemail = filter_input(INPUT_POST, 'desemail');
         $despassword = filter_input(INPUT_POST, 'despassword');
-        $inadmin = filter_input(INPUT_POST, 'inadmin');
-
-        $flash = '';
-
+        $inadmin = filter_input(INPUT_POST, 'inadmin', FILTER_VALIDATE_INT);
+        
         if($desperson && $deslogin && $nrphone && $desemail && $despassword){
             /*E-MAIL*/
             $email = UserHandler::validateEmail($desemail);
@@ -95,26 +110,36 @@ class UserController extends Controller {
                 $this->redirect('/admin/users/create');
             }
             /**LOGIN */
-            $email = UserHandler::validateLogin($desemail);
-            if($email != false){
+            $login = UserHandler::validateLogin($deslogin);
+            if($login != false){
                 $_SESSION['flash'] = 'Login não disponível.';
                 $this->redirect('/admin/users/create');
             }
+
+            /*VALIDAR NUMERO DE TELEFONE*/
+
+            $despassword = password_hash($despassword, PASSWORD_DEFAULT);
             
+            $newPerson = UserHandler::savePerson($desperson, $desemail, $nrphone);
+
+            if($newPerson){
+
+                $newUser = UserHandler::saveUser($newPerson['idperson'], $deslogin, $despassword, $inadmin);
+
+                $user = array_merge($newPerson, $newUser);
+            }
+
             
+            echo '<pre>';
+            print_r($user);
+            exit;
 
             
 
         } else {
+            $_SESSION['flash'] = 'Preencha todos os campos';
             $this->redirect('/admin/users/create');
         }
-
-        $flash = $_SESSION['flash'];
-
-        $this->render('admin/header');
-        $this->render('admin/users-create', ["flash" => $flash]);
-        $this->render('admin/footer');
-
     }
     
 }

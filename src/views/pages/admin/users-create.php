@@ -2,12 +2,16 @@
 <div class="content-wrapper">
 <!-- Content Header (Page header) -->
 <section class="content-header">
-    <?php if(!empty($flash)): ?>
-      <div class="alert alert-danger" role="alert"><?php echo $flash; ?></div> 
-    <?php endif;?>
   <h1>
     Lista de Usuários
   </h1>
+    <?php if(!empty($flash)): ?>
+      <div class="alert alert-danger" role="alert"><?php echo $flash; ?>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    <?php endif;?>
   <ol class="breadcrumb">
     <li><a href="<?=$base;?>/admin"><i class="fa fa-dashboard"></i> Home</a></li>
     <li><a href="<?=$base;?>/admin/users">Usuários</a></li>
@@ -29,23 +33,23 @@
         <form role="form" action="<?=$base?>/admin/users/create" method="post">
           <div class="box-body">
             <div class="form-group">
-              <label for="desperson">Nome</label>
+              <label for="desperson">Nome *</label>
               <input type="text" class="form-control" id="desperson" name="desperson" placeholder="Digite o nome">
             </div>
             <div class="form-group">
-              <label for="deslogin">Login</label>
+              <label for="deslogin">Login *</label>
               <input type="text" class="form-control" id="deslogin" name="deslogin" placeholder="Digite o login">
             </div>
             <div class="form-group">
-              <label for="nrphone">Telefone</label>
+              <label for="nrphone">Telefone *</label>
               <input type="tel" class="form-control" id="nrphone" name="nrphone" placeholder="Digite o telefone">
             </div>
             <div class="form-group">
-              <label for="desemail">E-mail</label>
+              <label for="desemail">E-mail *</label>
               <input type="email" class="form-control" id="desemail" name="desemail" placeholder="Digite o e-mail">
             </div>
             <div class="form-group">
-              <label for="despassword">Senha</label>
+              <label for="despassword">Senha *</label>
               <input type="password" class="form-control" id="despassword" name="despassword" placeholder="Digite a senha">
             </div>
             <div class="checkbox">

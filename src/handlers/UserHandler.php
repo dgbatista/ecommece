@@ -97,5 +97,33 @@ class UserHandler {
     }
 
 
+    public static function savePerson($desperson, $desemail, $nrphone){
+        Person::insert([
+            'desperson'=>$desperson,
+            'desemail'=>$desemail,
+            'nrphone'=>$nrphone
+        ])->execute();
+
+        $person = Person::select()->where('desemail', $desemail)->one();
+        if($person){
+            return $person;
+        }
+        return false;
+    }
+
+    public static function saveUser($idperson, $deslogin, $despassword, $inadmin = 0 ){
+        User::insert([
+            'idperson'=>$idperson,
+            'deslogin'=>$deslogin,
+            'despassword'=>$despassword
+        ])->execute();
+
+        $user  = User::select()->where('deslogin', $deslogin)->one();  
+        if($user){
+            return $user;
+        }    
+        return false;
+    }
+
  
 }
