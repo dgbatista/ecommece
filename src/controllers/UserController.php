@@ -27,9 +27,13 @@ class UserController extends Controller {
         ]);
     }
 
-    public function users(){
+    public function index(){
         $loggedUser = UserHandler::checkLogin();
         $users = UserHandler::getAllUsers();
+
+        // echo '<pre>';
+        // print_r($users);
+        // exit;
 
         if($loggedUser->token && $loggedUser->inadmin === 1){
 
@@ -64,19 +68,17 @@ class UserController extends Controller {
         }
     }
 
-    public function edit($args){
+    public function userEdit($args){
         $id = $args['id'];
 
-        echo $id;
-        exit;
-    }
+        $user = UserHandler::getUserByID($id);
 
-    public function delete($args){
-        $id = $args['id'];
-
-        echo $id;
-        exit;
-    }
+        $this->render('admin/header');
+        $this->render('admin/users-edit', [
+            'user' => $user
+        ]);
+        $this->render('admin/footer');       
+    }    
     
     public function create(){
         $flash = '';
@@ -93,6 +95,54 @@ class UserController extends Controller {
         $this->render('admin/footer');
 
     }    
+
+    public function update(){
+        $desperson = filter_input(INPUT_POST, 'desperson');
+        $deslogin = filter_input(INPUT_POST, 'deslogin');
+        $nrphone = filter_input(INPUT_POST, 'nrphone');
+        $desemail = filter_input(INPUT_POST, 'desemail');
+        $despassword = filter_input(INPUT_POST, 'despassword');
+        $inadmin = filter_input(INPUT_POST, 'inadmin', FILTER_VALIDATE_INT);
+        
+        if($desperson && $deslogin && $nrphone && $desemail && $despassword){
+            /*E-MAIL*/
+            $email = UserHandler::validateEmail($desemail);
+            if($email != false){
+                $_SESSION['flash'] = 'E-mail já cadastrado.';
+                $this->redirect('/admin/users/create');
+            }
+            /**LOGIN */
+            $login = UserHandler::validateLogin($deslogin);
+            if($login != false){
+                $_SESSION['flash'] = 'Login não disponível.';
+                $this->redirect('/admin/users/create');
+            }
+
+            /*VALIDAR NUMERO DE TELEFONE*/
+
+            $despassword = password_hash($despassword, PASSWORD_DEFAULT);
+            
+            $newPerson = UserHandler::savePerson($desperson, $desemail, $nrphone);
+
+            if($newPerson){
+
+                $newUser = UserHandler::saveUser($newPerson['idperson'], $deslogin, $despassword, $inadmin);
+
+                $user = array_merge($newPerson, $newUser);
+            }
+
+        } else {
+            $_SESSION['flash'] = 'Preencha todos os campos';
+            $this->redirect('/admin/users/create');
+        }
+    }
+
+    public function delete($args){
+        $id = $args['id'];
+
+        echo $id;
+        exit;
+    }
 
     public function createAction(){
         $desperson = filter_input(INPUT_POST, 'desperson');
@@ -128,13 +178,6 @@ class UserController extends Controller {
 
                 $user = array_merge($newPerson, $newUser);
             }
-
-            
-            echo '<pre>';
-            print_r($user);
-            exit;
-
-            
 
         } else {
             $_SESSION['flash'] = 'Preencha todos os campos';

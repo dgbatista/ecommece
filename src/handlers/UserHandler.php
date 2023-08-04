@@ -50,7 +50,7 @@ class UserHandler {
 
     public static function getAllUsers(){
         $userList = User::select()
-            ->join('persons', 'users.iduser', '=' , 'persons.idperson')
+            ->join('persons', 'users.idperson', '=' , 'persons.idperson')
             ->orderBy('deslogin')
         ->get();
         $users = [];
@@ -125,5 +125,34 @@ class UserHandler {
         return false;
     }
 
+    public static function getUserById($iduser){
+        $data = User::select()
+            ->where('iduser', $iduser)
+            ->join('persons', 'users.idperson', '=' , 'persons.idperson')
+            ->orderBy('deslogin')
+        ->one();
+
+        $user = self::transformArrayToUser($data);
+
+        return $user;
+    }
+
+
+
+    /**Auxiliar*/
+    private static function transformArrayToUser($data = []){
+        $user = new User();
+
+        $user->iduser = $data['iduser'];
+        $user->idperson = $data['idperson'];
+        $user->deslogin = $data['deslogin'];
+        $user->dtregister = $data['dtregister'];
+        $user->desperson = $data['desperson'];
+        $user->desemail = $data['desemail'];
+        $user->nrphone = $data['nrphone'];
+        $user->inadmin = $data['inadmin'];
+
+        return $user;
+    }
  
 }
