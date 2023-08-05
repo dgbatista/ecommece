@@ -100,5 +100,15 @@
      Both of these plugins are recommended to enhance the
      user experience. Slimscroll is required when using the
      fixed layout. -->
+<script type="text/javascript">
+  var check = document.querySelector('input[name=inadmin]');
+  check.addEventListener('change', function(){
+    if(this.checked){
+      check.value = '1';
+    }else{
+      check.value = '0';
+    }
+  });
+  </script>
 </body>
 </html>

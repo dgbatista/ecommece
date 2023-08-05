@@ -97,44 +97,61 @@ class UserController extends Controller {
     }    
 
     public function update(){
+        $iduser = filter_input(INPUT_POST, 'iduser');
         $desperson = filter_input(INPUT_POST, 'desperson');
         $deslogin = filter_input(INPUT_POST, 'deslogin');
         $nrphone = filter_input(INPUT_POST, 'nrphone');
         $desemail = filter_input(INPUT_POST, 'desemail');
         $despassword = filter_input(INPUT_POST, 'despassword');
-        $inadmin = filter_input(INPUT_POST, 'inadmin', FILTER_VALIDATE_INT);
+        $inadmin = filter_input(INPUT_POST, 'inadmin');
+
+        $inadmin = ($inadmin != 1) ? 0 : 1;
+
+        $user = UserHandler::getUserById($iduser); 
         
-        if($desperson && $deslogin && $nrphone && $desemail && $despassword){
+        if($desperson && $deslogin && $nrphone && $desemail){
             /*E-MAIL*/
-            $email = UserHandler::validateEmail($desemail);
-            if($email != false){
-                $_SESSION['flash'] = 'E-mail já cadastrado.';
-                $this->redirect('/admin/users/create');
+            if($desemail != $user->desemail){
+                $email = UserHandler::validateEmail($desemail);
+                if($email != false){
+                    $_SESSION['flash'] = 'E-mail já cadastrado.';
+                    $this->redirect('/admin/users/'.$user->iduser.'/edit');
+                }
+                $user->desemail = $desemail;
             }
-            /**LOGIN */
-            $login = UserHandler::validateLogin($deslogin);
-            if($login != false){
-                $_SESSION['flash'] = 'Login não disponível.';
-                $this->redirect('/admin/users/create');
-            }
-
-            /*VALIDAR NUMERO DE TELEFONE*/
-
-            $despassword = password_hash($despassword, PASSWORD_DEFAULT);
             
-            $newPerson = UserHandler::savePerson($desperson, $desemail, $nrphone);
-
-            if($newPerson){
-
-                $newUser = UserHandler::saveUser($newPerson['idperson'], $deslogin, $despassword, $inadmin);
-
-                $user = array_merge($newPerson, $newUser);
+            /**LOGIN */
+            if($deslogin != $user->deslogin){
+                $login = UserHandler::validateLogin($deslogin);
+                if($login != false){
+                    $_SESSION['flash'] = 'Login não disponível.';
+                    $this->redirect('/admin/users/'.$user->iduser.'/edit');
+                }
+                $user->deslogin = $deslogin;
             }
+
+            if(!empty($user->despassword)){
+                if(password_verify($despassword, $user->despassword) === false){
+                    $despassword = password_hash($despassword, PASSWORD_DEFAULT);
+                    $user->despassword = $despassword;
+                }
+            }
+
+            /*New person*/
+            $user->desperson = $desperson;
+            $user->nrphone = $nrphone;
+            $user->inadmin = $inadmin;
+
+            // $userArray = json_decode(json_encode($user), true);
+
+            UserHandler::updateUserPerson($user);
 
         } else {
             $_SESSION['flash'] = 'Preencha todos os campos';
-            $this->redirect('/admin/users/create');
+            $this->redirect('/admin/users/'.$user->iduser.'/edit');
         }
+
+        $this->redirect('/admin/users/'.$user->iduser.'/edit');
     }
 
     public function delete($args){

@@ -55,7 +55,7 @@
             </div>
             <div class="checkbox">
               <label>
-                <input type="checkbox" name="inadmin" value="<?=$user->inadmin?>" <?php echo ($user->inadmin == 1)? 'checked': '';?>/> Acesso de Administrador
+                <input type="checkbox" name="inadmin" value="<?=$user->inadmin;?>" <?php echo ($user->inadmin == 1)? 'checked': '';?>/> Acesso de Administrador
               </label>
             </div>
           </div>

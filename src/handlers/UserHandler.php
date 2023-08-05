@@ -137,22 +137,71 @@ class UserHandler {
         return $user;
     }
 
+    public static function getPersonById($idperson){
+        $data = Person::select()
+            ->where('idperson', $idperson)
+        ->one();
+
+        if($data){
+            $user = $user = new User($data);
+            $user->idperson = $data['idperson'];
+            $user->desperson = $data['desperson'];
+            $user->desemail = $data['desemail'];
+            $user->nrphone = $data['nrphone'];
+            $user->dtregister = $data['dtregister'];
+            
+            return $user;
+        }      
+
+        return false;;
+    }
+
 
 
     /**Auxiliar*/
     private static function transformArrayToUser($data = []){
-        $user = new User();
 
-        $user->iduser = $data['iduser'];
-        $user->idperson = $data['idperson'];
-        $user->deslogin = $data['deslogin'];
-        $user->dtregister = $data['dtregister'];
-        $user->desperson = $data['desperson'];
-        $user->desemail = $data['desemail'];
-        $user->nrphone = $data['nrphone'];
-        $user->inadmin = $data['inadmin'];
+        if($data){
+            $user = new User();
 
-        return $user;
+            $user->iduser = $data['iduser'];
+            $user->deslogin = $data['deslogin'];
+            $user->despassword = $data['despassword'];
+            $user->idperson = $data['idperson'];
+            $user->desperson = $data['desperson'];
+            $user->desemail = $data['desemail'];
+            $user->nrphone = $data['nrphone'];
+            $user->inadmin = $data['inadmin'];
+            $user->dtregister = $data['dtregister'];
+
+            return $user;
+        }
+
+        return $data;
+    }
+
+    public static function updateUserPerson($user){
+
+        try{
+            User::update([
+                    'deslogin' => $user->deslogin,
+                    'despassword' => $user->despassword,
+                    'inadmin' => $user->inadmin
+                ])->where('iduser', $user->iduser)
+            ->execute();
+
+            Person::update([
+                    'desperson' => $user->desperson,
+                    'desemail' => $user->desemail,
+                    'nrphone' => $user->nrphone
+                ])->where('idperson', $user->idperson)
+            ->execute();
+        }catch(Exception $e){
+            echo 'Exceção capturada: ', $e->getMessage(), "\n";
+        }
+
+        return true;
+
     }
  
 }
