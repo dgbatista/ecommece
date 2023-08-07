@@ -51,7 +51,7 @@ class UserHandler {
     public static function getAllUsers(){
         $userList = User::select()
             ->join('persons', 'users.idperson', '=' , 'persons.idperson')
-            ->orderBy('deslogin')
+            ->orderBy('desperson')
         ->get();
         $users = [];
 
@@ -201,7 +201,16 @@ class UserHandler {
         }
 
         return true;
+    }
 
+    public static function deleteUser($iduser){
+
+        $user = User::select()->where('iduser', $iduser)->execute();
+
+        if(count($user)> 0){
+            User::delete()->where('iduser',$user[0]['iduser'])->execute();
+            Person::delete()->where('idperson',$user[0]['idperson'])->execute();
+        }
     }
  
 }

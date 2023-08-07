@@ -6,6 +6,12 @@ use \src\handlers\UserHandler;
 
 class UserController extends Controller {
 
+    private $loggedUser;
+
+    public function __construct(){
+        $this->loggedUser = UserHandler::checkLogin();
+    }
+
     /*Page*/
     public function signin(){
         echo 'login';
@@ -28,14 +34,13 @@ class UserController extends Controller {
     }
 
     public function index(){
-        $loggedUser = UserHandler::checkLogin();
         $users = UserHandler::getAllUsers();
 
         // echo '<pre>';
         // print_r($users);
         // exit;
 
-        if($loggedUser->token && $loggedUser->inadmin === 1){
+        if($this->loggedUser->token && $this->loggedUser->inadmin === 1){
 
             $this->render('admin/header');
             $this->render('admin/users', [
@@ -151,14 +156,17 @@ class UserController extends Controller {
             $this->redirect('/admin/users/'.$user->iduser.'/edit');
         }
 
-        $this->redirect('/admin/users/'.$user->iduser.'/edit');
+        $this->redirect('/admin/users');
     }
 
     public function delete($args){
         $id = $args['id'];
 
-        echo $id;
-        exit;
+        if($this->loggedUser->inadmin === 1){
+            UserHandler::deleteUser($id);
+        }
+
+        $this->redirect('/admin/users');
     }
 
     public function createAction(){
@@ -195,6 +203,8 @@ class UserController extends Controller {
 
                 $user = array_merge($newPerson, $newUser);
             }
+
+            $this->redirect('/admin/users');
 
         } else {
             $_SESSION['flash'] = 'Preencha todos os campos';
