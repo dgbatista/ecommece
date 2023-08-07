@@ -4,7 +4,7 @@ use core\Router;
 
 $router = new Router();
 
-/*SITE*/
+
 $router->get('/', 'HomeController@index');
 $router->get('/login', 'UserController@signin');
 $router->get('/cadastro', 'UserController@signup');
@@ -21,4 +21,12 @@ $router->get('/admin/users', 'UserController@index');
 $router->get('/admin', 'AdminController@index');
 
 $router->get('/logout', 'HomeController@logout');
+
+/*CATEGORIES*/
+$router->get('/admin/categories/create','CategoryController@create');
+$router->post('/admin/categories/create', 'CategoryController@create');
+
+$router->get('/admin/categories/{id}', 'CategoryController@update');
+$router->post('/admin/categories/{id}', 'CategoryController@update');
+$router->get('/admin/categories', 'CategoryController@index');
 

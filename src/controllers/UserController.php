@@ -36,10 +36,6 @@ class UserController extends Controller {
     public function index(){
         $users = UserHandler::getAllUsers();
 
-        // echo '<pre>';
-        // print_r($users);
-        // exit;
-
         if($this->loggedUser->token && $this->loggedUser->inadmin === 1){
 
             $this->render('admin/header');
