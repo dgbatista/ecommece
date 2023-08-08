@@ -4,11 +4,15 @@ use core\Router;
 
 $router = new Router();
 
-
+/**SITE */
 $router->get('/', 'HomeController@index');
 $router->get('/login', 'UserController@signin');
 $router->get('/cadastro', 'UserController@signup');
 
+$router->get('/categories/{id}', 'CategoryController@index');
+
+
+/**ADMIN */
 $router->get('/admin/login', 'UserController@admin_signin');
 $router->post('/admin/login', 'UserController@signin_action');
 
@@ -29,5 +33,5 @@ $router->post('/admin/categories/create', 'CategoryController@create');
 $router->get('/admin/categories/{id}/delete', 'CategoryController@delete');
 $router->get('/admin/categories/{id}', 'CategoryController@update');
 $router->post('/admin/categories/{id}', 'CategoryController@update');
-$router->get('/admin/categories', 'CategoryController@index');
+$router->get('/admin/categories', 'CategoryController@index_admin');
 

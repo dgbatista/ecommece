@@ -16,13 +16,15 @@ class CategoryController extends Controller {
         }        
     }
 
-    public function index() {
+    public function index_admin() {
 
         $categories = CategoryHandler::getCategories();
 
        $this->render('admin/categories', [
         'categories' => $categories
        ]);
+
+       self::updateFile();
     }
 
     public function create() {
@@ -35,6 +37,8 @@ class CategoryController extends Controller {
        }
        
        $this->render('admin/categories-create');
+
+       self::updateFile();
        
     }
 
@@ -52,16 +56,16 @@ class CategoryController extends Controller {
                     $this->redirect('/admin/categories');
                 }
 
+                $this->render('admin/categories-update' , [
+                    'category' => $category
+                ]);
+
             } else {
                 $this->redirect('/admin/categories');
-            }
-
-            self::updateFile();
-
-            $this->render('admin/categories-update' , [
-                'category' => $category
-            ]);
+            } 
         }
+
+        self::updateFile();
     }
 
     public function delete($args){
@@ -75,10 +79,9 @@ class CategoryController extends Controller {
             }
         }
 
-        self::updateFile();
-
         $this->redirect('/admin/categories');
-
+        
+        self::updateFile();
     }
 
     public static function updateFile(){
@@ -87,7 +90,7 @@ class CategoryController extends Controller {
         $html = [];
 
         foreach($categories as $row){
-            array_push($html, '<li><a href="<?=$base;?>/category/'.$row->idcategory.'">'.$row->descategory.'</a></li>');
+            array_push($html, '<li><a href="<?=$base;?>/categories/'.$row->idcategory.'">'.$row->descategory.'</a></li>');
         }
         file_put_contents($_SERVER['DOCUMENT_ROOT'] 
             . DIRECTORY_SEPARATOR ."ecommerce".DIRECTORY_SEPARATOR 
@@ -96,5 +99,23 @@ class CategoryController extends Controller {
             . DIRECTORY_SEPARATOR ."site". DIRECTORY_SEPARATOR 
             . "categories-menu.php", implode('', $html));
     }
+
+    public function index($args){
+        $idcategory = (int)$args['id'];
+
+        $category = CategoryHandler::getCategoryById($idcategory);
+        
+        if($category){
+            $this->render('category',[
+                'category' => $category,
+                'products' => []
+            ]);
+        } else {
+            $this->redirect('index');
+        }      
+
+    }
+
+    
 
 }
