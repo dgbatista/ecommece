@@ -49,6 +49,20 @@ class CategoryHandler {
         return false;
     }
 
+    public static function update($idcategory , $descategory){
+        Categorie::update([
+                'descategory'=> $descategory
+            ])
+            ->where('idcategory', $idcategory)
+        ->execute();
+    }
+
+    public static function delete($idcategory){
+        Categorie::delete()
+            ->where('idcategory', $idcategory)
+        ->execute();
+    }
+
     
 
 }

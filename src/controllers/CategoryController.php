@@ -43,12 +43,18 @@ class CategoryController extends Controller {
     }
 
     public function update($args) {
-        $idcategory = $args['id'];
+        $idcategory = $args['id'];        
 
         if(!empty($idcategory)){
             $category = CategoryHandler::getCategoryById($idcategory);
 
             if(!empty($category)){
+                $descategory = filter_input(INPUT_POST, 'descategory');
+        
+                if(!empty($descategory)){
+                    CategoryHandler::update($idcategory , $descategory);
+                    $this->redirect('/admin/categories');
+                }
 
             } else {
                 $this->redirect('/admin/categories');
@@ -60,8 +66,21 @@ class CategoryController extends Controller {
             ]);
             $this->render('admin/footer');
         }
+    }
 
+    public function delete($args){
+        $id = $args['id'];
         
+        if(!empty($id)){
+            $category = CategoryHandler::getCategoryById($id);
+
+            if($category){
+                CategoryHandler::delete($id);
+            }
+        }
+
+        $this->redirect('/admin/categories');
+
     }
 
 }

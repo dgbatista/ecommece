@@ -26,6 +26,7 @@ $router->get('/logout', 'HomeController@logout');
 $router->get('/admin/categories/create','CategoryController@create');
 $router->post('/admin/categories/create', 'CategoryController@create');
 
+$router->get('/admin/categories/{id}/delete', 'CategoryController@delete');
 $router->get('/admin/categories/{id}', 'CategoryController@update');
 $router->post('/admin/categories/{id}', 'CategoryController@update');
 $router->get('/admin/categories', 'CategoryController@index');
