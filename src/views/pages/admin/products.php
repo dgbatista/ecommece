@@ -49,8 +49,8 @@
                       <td><?=$product->vllength;?></td>
                       <td><?=$product->vlweight;?></td>
                       <td>
-                        <a href="/admin/$products/<?=$product->idproduct;?>" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Editar</a>
-                        <a href="/admin/$products/<?=$product->idproduct;?>/delete" onclick="return confirm('Deseja realmente excluir este registro?')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> Excluir</a>
+                        <a href="<?=$base;?>/admin/products/<?=$product->idproduct;?>" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Editar</a>
+                        <a href="<?=$base;?>/admin/products/<?=$product->idproduct;?>/delete" onclick="return confirm('Deseja realmente excluir este registro?')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> Excluir</a>
                       </td>
                     </tr>
                   <?php endforeach; ?>

@@ -49,13 +49,13 @@ class ProductHandler {
         return true;
     }
 
-    public static function getCategoryById($idcatagory){
-        $data = Categorie::select()->where('idcategory', $idcatagory)->one();
+    public static function getProductById($idproduct){
+        $data = Product::select()->where('idproduct', $idproduct)->one();
 
         if($data){
-            $category = self::categoryArrayToObject($data);
+            $product = self::productArrayToObject($data);
 
-            return $category;
+            return $product;
         }
 
         return false;

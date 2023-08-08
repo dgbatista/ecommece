@@ -35,6 +35,7 @@ $router->get('/admin/categories/{id}', 'CategoryController@update');
 $router->post('/admin/categories/{id}', 'CategoryController@update');
 $router->get('/admin/categories', 'CategoryController@index_admin');
 
+$router->get('/admin/products/{id}', 'ProductController@update');
 $router->post('/admin/products/create', 'ProductController@create');
 $router->get('/admin/products/create', 'ProductController@create');
 $router->get('/admin/products', 'ProductController@index_admin');

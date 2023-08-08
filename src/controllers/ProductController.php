@@ -54,23 +54,23 @@ class ProductController extends Controller {
     }
 
     public function update($args) {
-        $idproduct = $args['id'];        
+        $idproduct = $args['id'];  
 
         if(!empty($idproduct)){
             $product = ProductHandler::getProductById($idproduct);
 
             if($product){
-                $desproduct = filter_input(INPUT_POST, 'desproduct');
+                // $desproduct = filter_input(INPUT_POST, 'desproduct');
         
-                if(!empty($desproduct)){
-                    ProductHandler::update($idproduct , $desproduct);
-                    $this->redirect('/admin/products');
-                }
+                // if(!empty($desproduct)){
+                //     ProductHandler::update($idproduct , $desproduct);
+                //     $this->redirect('/admin/products');
+                // }
 
+                
                 $this->render('admin/products-update' , [
-                    'products' => $product
+                    'product' => $product
                 ]);
-
             } else {
                 $this->redirect('/admin/products');
             } 
