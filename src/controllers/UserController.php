@@ -38,12 +38,10 @@ class UserController extends Controller {
 
         if($this->loggedUser->token && $this->loggedUser->inadmin === 1){
 
-            $this->render('admin/header');
             $this->render('admin/users', [
                 'users'=> $users
             ]);
-            $this->render('admin/footer');
-
+            
         } else {
             $this->redirect('/admin/login');
         }
@@ -74,11 +72,9 @@ class UserController extends Controller {
 
         $user = UserHandler::getUserByID($id);
 
-        $this->render('admin/header');
         $this->render('admin/users-edit', [
             'user' => $user
         ]);
-        $this->render('admin/footer');       
     }    
     
     public function create(){
@@ -89,11 +85,9 @@ class UserController extends Controller {
         }
         $this->render('admin/create');
         
-        $this->render('admin/header');
         $this->render('admin/users-create', [
             'flash' => $flash
         ]);
-        $this->render('admin/footer');
 
     }    
 

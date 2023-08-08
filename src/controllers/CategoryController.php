@@ -20,11 +20,9 @@ class CategoryController extends Controller {
 
         $categories = CategoryHandler::getCategories();
 
-       $this->render('admin/header');
        $this->render('admin/categories', [
         'categories' => $categories
        ]);
-       $this->render('admin/footer');
     }
 
     public function create() {
@@ -36,9 +34,7 @@ class CategoryController extends Controller {
             $this->redirect('/admin/categories');
        }
        
-       $this->render('admin/header');
        $this->render('admin/categories-create');
-       $this->render('admin/footer');
        
     }
 
@@ -60,11 +56,11 @@ class CategoryController extends Controller {
                 $this->redirect('/admin/categories');
             }
 
-            $this->render('admin/header');
+            self::updateFile();
+
             $this->render('admin/categories-update' , [
                 'category' => $category
             ]);
-            $this->render('admin/footer');
         }
     }
 
@@ -79,8 +75,26 @@ class CategoryController extends Controller {
             }
         }
 
+        self::updateFile();
+
         $this->redirect('/admin/categories');
 
+    }
+
+    public static function updateFile(){
+        $categories = CategoryHandler::getCategories();
+
+        $html = [];
+
+        foreach($categories as $row){
+            array_push($html, '<li><a href="<?=$base;?>/category/'.$row->idcategory.'">'.$row->descategory.'</a></li>');
+        }
+        file_put_contents($_SERVER['DOCUMENT_ROOT'] 
+            . DIRECTORY_SEPARATOR ."ecommerce".DIRECTORY_SEPARATOR 
+            . "src". DIRECTORY_SEPARATOR . "views" 
+            . DIRECTORY_SEPARATOR . "partials" 
+            . DIRECTORY_SEPARATOR ."site". DIRECTORY_SEPARATOR 
+            . "categories-menu.php", implode('', $html));
     }
 
 }

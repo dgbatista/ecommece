@@ -1,3 +1,5 @@
+<?php $render('admin/header'); ?>
+
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
 <!-- Content Header (Page header) -->
@@ -22,4 +24,4 @@
 </div>
 <!-- /.content-wrapper -->
 
-<?php $render('/admin', 'footer');?>
+<?php $render('admin/footer'); ?>

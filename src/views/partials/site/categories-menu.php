@@ -1,0 +1,1 @@
+<li><a href="<?=$base;?>/category/1">Category editada</a></li><li><a href="<?=$base;?>/category/3">teste</a></li><li><a href="<?=$base;?>/category/5">Nova Categoria editada</a></li>
