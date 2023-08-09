@@ -3,6 +3,7 @@ namespace src\controllers;
 
 use \core\Controller;
 use \src\handlers\UserHandler;
+use \src\handlers\ProductHandler;
 
 class HomeController extends Controller {
 
@@ -16,7 +17,11 @@ class HomeController extends Controller {
     // }
 
     public function index() {
-        $this->render('index');
+        $products = ProductHandler::getProducts();
+
+        $this->render('index', [
+            'products' => $products
+        ]);
     }
 
     public function logout(){
