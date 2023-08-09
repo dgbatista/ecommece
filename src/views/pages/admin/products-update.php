@@ -1,4 +1,4 @@
-<?php $render('admin/header'); ?>
+<?php $render('admin/header', ['pageActive' => $pageActive]); ?>
 
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -20,7 +20,7 @@
         </div>
         <!-- /.box-header -->
         <!-- form start -->
-        <form role="form" action="/admin/products/<?=$product->idproduct;?>" method="post" enctype="multipart/form-data">
+        <form role="form" action="<?=$base;?>/admin/products/<?=$product->idproduct;?>" method="post" enctype="multipart/form-data">
           <div class="box-body">
             <div class="form-group">
               <label for="desproduct">Nome da produto</label>

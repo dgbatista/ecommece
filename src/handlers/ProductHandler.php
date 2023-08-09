@@ -61,17 +61,24 @@ class ProductHandler {
         return false;
     }
 
-    public static function update($idcategory , $descategory){
-        Categorie::update([
-                'descategory'=> $descategory
+    public static function update(Product $p){
+
+         Product::update([
+                'desproduct'=> $p->desproduct,
+                'vlprice'=> $p->vlprice,
+                'vlwidth'=> $p->vlwidth,
+                'vlheight'=> $p->vlheight,
+                'vllength'=> $p->vllength,
+                'vlweight'=> $p->vlweight,
+                'desurl'=> $p->desurl
             ])
-            ->where('idcategory', $idcategory)
+            ->where('idproduct', $p->idproduct)
         ->execute();
     }
 
-    public static function delete($idcategory){
-        Categorie::delete()
-            ->where('idcategory', $idcategory)
+    public static function delete($idproduct){
+        Product::delete()
+            ->where('idproduct', $idproduct)
         ->execute();
     }
 

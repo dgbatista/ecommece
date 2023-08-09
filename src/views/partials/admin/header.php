@@ -256,9 +256,9 @@ desired effect
       <ul class="sidebar-menu">
         <li class="header">HEADER</li>
         <!-- Optionally, you can add icons to the links -->
-        <li class="active"><a href="<?=$base;?>/admin/users"><i class="fa fa-users"></i> <span>Usuários</span></a></li>
-        <li class="active"><a href="<?=$base;?>/admin/categories"><i class="fa fa-link"></i> <span>Categorias</span></a></li>
-        <li class="active"><a href="<?=$base;?>/admin/products"><i class="fa fa-link"></i> <span>Produtos</span></a></li>
+        <li class="<?=($pageActive==='users')?'active':'';?>"><a href="<?=$base;?>/admin/users"><i class="fa fa-users"></i> <span>Usuários</span></a></li>
+        <li class="<?=($pageActive==='categories')?'active':'';?>"><a href="<?=$base;?>/admin/categories"><i class="fa fa-link"></i> <span>Categorias</span></a></li>
+        <li class="<?=($pageActive==='products')?'active':'';?>"><a href="<?=$base;?>/admin/products"><i class="fa fa-link"></i> <span>Produtos</span></a></li>
         <li><a href="#"><i class="fa fa-link"></i> <span>Another Link</span></a></li>
         <li class="treeview">
           <a href="#"><i class="fa fa-link"></i> <span>Multilevel</span>

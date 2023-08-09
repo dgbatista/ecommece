@@ -1,5 +1,4 @@
-<?php $render('admin/header');?>
-
+<?php $render('admin/header', ['pageActive' => $pageActive]); ?>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
 <!-- Content Header (Page header) -->

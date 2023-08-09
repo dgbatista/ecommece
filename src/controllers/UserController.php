@@ -7,6 +7,7 @@ use \src\handlers\UserHandler;
 class UserController extends Controller {
 
     private $loggedUser;
+    private $pageActive = 'users';
 
     public function __construct(){
         $this->loggedUser = UserHandler::checkLogin();
@@ -39,7 +40,8 @@ class UserController extends Controller {
         if($this->loggedUser->token && $this->loggedUser->inadmin === 1){
 
             $this->render('admin/users', [
-                'users'=> $users
+                'users'=> $users,
+                'pageActive' => $this->pageActive
             ]);
             
         } else {
@@ -73,7 +75,8 @@ class UserController extends Controller {
         $user = UserHandler::getUserByID($id);
 
         $this->render('admin/users-edit', [
-            'user' => $user
+            'user' => $user,
+            'pageActive' => $this->pageActive
         ]);
     }    
     
@@ -86,7 +89,8 @@ class UserController extends Controller {
         $this->render('admin/create');
         
         $this->render('admin/users-create', [
-            'flash' => $flash
+            'flash' => $flash,
+            'pageActive' => $this->pageActive
         ]);
 
     }    
@@ -125,11 +129,9 @@ class UserController extends Controller {
                 $user->deslogin = $deslogin;
             }
 
-            if(!empty($user->despassword)){
-                if(password_verify($despassword, $user->despassword) === false){
-                    $despassword = password_hash($despassword, PASSWORD_DEFAULT);
-                    $user->despassword = $despassword;
-                }
+            if(!empty($user->despassword)){            
+            $despassword = password_hash($despassword, PASSWORD_DEFAULT);
+            $user->despassword = $despassword;
             }
 
             /*New person*/

@@ -9,6 +9,7 @@ use \src\models\Product;
 class ProductController extends Controller {
 
     private $loggedUser;
+    private $pageActive = 'products';
 
     public function __construct() {
         $this->loggedUser = UserHandler::checkLogin();
@@ -22,7 +23,8 @@ class ProductController extends Controller {
         $products = ProductHandler::getProducts();
 
        $this->render('admin/products', [
-        'products' => $products
+        'products' => $products,
+        'pageActive' => $this->pageActive
        ]);
     }
 
@@ -49,27 +51,35 @@ class ProductController extends Controller {
             ProductHandler::save($newProduct);
             $this->redirect('/admin/products');
        }       
-
-       $this->render('admin/products-create');       
+       
+       $this->render('admin/products-create',[
+            'pageActive' => $this->pageActive
+       ]);       
     }
 
     public function update($args) {
-        $idproduct = $args['id'];  
+        $idproduct = $args['id'];        
 
         if(!empty($idproduct)){
             $product = ProductHandler::getProductById($idproduct);
 
             if($product){
-                // $desproduct = filter_input(INPUT_POST, 'desproduct');
-        
-                // if(!empty($desproduct)){
-                //     ProductHandler::update($idproduct , $desproduct);
-                //     $this->redirect('/admin/products');
-                // }
+                if(!empty($_POST)){
+            
+                    $product->desproduct = $_POST['desproduct'];
+                    $product->vlprice = $_POST['vlprice'];
+                    $product->vlwidth = $_POST['vlwidth'];
+                    $product->vlheight = $_POST['vlheight'];
+                    $product->vllength = $_POST['vllength'];
+                    $product->vlweight = $_POST['vlweight'];
 
-                
+                    ProductHandler::update($product);
+                    $this->redirect('/admin/products');
+
+                } 
                 $this->render('admin/products-update' , [
-                    'product' => $product
+                    'product' => $product, 
+                    'pageActive' => $this->pageActive                   
                 ]);
             } else {
                 $this->redirect('/admin/products');
@@ -79,15 +89,15 @@ class ProductController extends Controller {
 
     public function delete($args){
         $id = $args['id'];
-        
-        if(!empty($id)){
-            $category = CategoryHandler::getCategoryById($id);
+           
+        if(!empty($id) && $this->loggedUser->inadmin === 1){
+            $product = ProductHandler::getProductById($id);
 
-            if($category){
+            if($product){
                 ProductHandler::delete($id);
             }
         }
 
-        $this->redirect('/admin/categories');
+        $this->redirect('/admin/products');
     }
 }

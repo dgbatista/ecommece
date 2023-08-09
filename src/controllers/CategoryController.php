@@ -8,11 +8,12 @@ use \src\handlers\CategoryHandler;
 class CategoryController extends Controller {
 
     private $loggedUser;
+    private $pageActive = 'categories';
 
     public function __construct() {
         $this->loggedUser = UserHandler::checkLogin();
         if(UserHandler::checkLogin() === false){
-            $this->redirect('/login');
+            $this->redirect('/admin/login');
         }        
     }
 
@@ -21,7 +22,8 @@ class CategoryController extends Controller {
         $categories = CategoryHandler::getCategories();
 
        $this->render('admin/categories', [
-        'categories' => $categories
+        'categories' => $categories,
+        'pageActive' => $this->pageActive
        ]);
 
        self::updateFile();
@@ -36,7 +38,9 @@ class CategoryController extends Controller {
             $this->redirect('/admin/categories');
        }
        
-       $this->render('admin/categories-create');
+       $this->render('admin/categories-create',[
+            'pageActive' => $this->pageActive
+        ]);
 
        self::updateFile();
        
@@ -57,7 +61,8 @@ class CategoryController extends Controller {
                 }
 
                 $this->render('admin/categories-update' , [
-                    'category' => $category
+                    'category' => $category,
+                    'pageActive' => $this->pageActive
                 ]);
 
             } else {
