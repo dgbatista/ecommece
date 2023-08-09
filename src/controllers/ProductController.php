@@ -58,20 +58,25 @@ class ProductController extends Controller {
     }
 
     public function update($args) {
-        $idproduct = $args['id'];        
+        $idproduct = $args['id'];       
 
         if(!empty($idproduct)){
             $product = ProductHandler::getProductById($idproduct);
 
             if($product){
                 if(!empty($_POST)){
-            
+           
                     $product->desproduct = $_POST['desproduct'];
                     $product->vlprice = $_POST['vlprice'];
                     $product->vlwidth = $_POST['vlwidth'];
                     $product->vlheight = $_POST['vlheight'];
                     $product->vllength = $_POST['vllength'];
                     $product->vlweight = $_POST['vlweight'];
+
+                    /*FOTO*/
+                    if(isset($_FILES['file']) && !empty($_FILES['file']['tmp_name'])){                        
+                         ProductHandler::uploadPhoto($_FILES['file'], $idproduct);                        
+                    } 
 
                     ProductHandler::update($product);
                     $this->redirect('/admin/products');
@@ -100,4 +105,6 @@ class ProductController extends Controller {
 
         $this->redirect('/admin/products');
     }
+
+    
 }

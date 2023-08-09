@@ -51,7 +51,7 @@
               <input type="file" class="form-control" id="file" name="file" value="<?=$product->vlweight;?>">
               <div class="box box-widget">
                 <div class="box-body">
-                  <img class="img-responsive" id="image-preview" src="<?=$product->desphoto;?>" alt="Photo">
+                  <img class="img-responsive" id="image-preview" src="<?=$base.$product->desphoto;?>" alt="Photo">
                 </div>
               </div>
             </div>

@@ -7,7 +7,6 @@ class ProductHandler {
 
     private static function productArrayToObject($data){
 
-       
         $product = new Product();
         $product->idproduct = $data['idproduct'];
         $product->desproduct = $data['desproduct'];
@@ -16,7 +15,8 @@ class ProductHandler {
         $product->vlheight = $data['vlheight'];
         $product->vllength = $data['vllength'];
         $product->vlweight = $data['vlweight'];
-        $product->desurl = $data['desurl'];
+        $product->desurl = $data['desurl'];        
+        $product->desphoto = self::checkPhoto($data['idproduct']);
 
         return $product;
     }
@@ -74,14 +74,79 @@ class ProductHandler {
             ])
             ->where('idproduct', $p->idproduct)
         ->execute();
+
     }
 
     public static function delete($idproduct){
         Product::delete()
             ->where('idproduct', $idproduct)
         ->execute();
+
+        $dist = $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 
+        'ecommerce' . DIRECTORY_SEPARATOR . 
+        'public' . DIRECTORY_SEPARATOR . 
+        'assets'. DIRECTORY_SEPARATOR . 
+        'site'. DIRECTORY_SEPARATOR . 
+        'img'. DIRECTORY_SEPARATOR . 
+        'products' . DIRECTORY_SEPARATOR . 
+        $idproduct.'.jpg';
+
+        unlink($dist);
     }
 
-    
+    public static function checkPhoto($idProduct){
+
+        if(file_exists(
+                $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 
+                'ecommerce' . DIRECTORY_SEPARATOR . 
+                'public' . DIRECTORY_SEPARATOR . 
+                'assets'. DIRECTORY_SEPARATOR . 
+                'site'. DIRECTORY_SEPARATOR . 
+                'img'. DIRECTORY_SEPARATOR . 
+                'products' . DIRECTORY_SEPARATOR . 
+                $idProduct.'.jpg'
+            )){
+
+            return "/assets/site/img/products/".$idProduct.".jpg";
+        } else {
+            return "/assets/site/img/products/product.jpg";
+        }
+    }
+
+    public static function uploadPhoto($file, $idProduct){
+
+        $extension = explode('.', $file['name']);
+        $extension = end($extension);
+
+        switch($extension){
+            case "jpg":
+            case "jpeg":
+                $image = imagecreatefromjpeg($file["tmp_name"]);
+            break;
+
+            case "gif":
+                $image = imagecreatefromgif($file["tmp_name"]);
+            break;
+
+            case "png":
+                $image = imagecreatefrompng($file["tmp_name"]);
+            break;
+        }
+
+        $dist = $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 
+        'ecommerce' . DIRECTORY_SEPARATOR . 
+        'public' . DIRECTORY_SEPARATOR . 
+        'assets'. DIRECTORY_SEPARATOR . 
+        'site'. DIRECTORY_SEPARATOR . 
+        'img'. DIRECTORY_SEPARATOR . 
+        'products' . DIRECTORY_SEPARATOR . 
+        $idProduct.'.jpg';
+
+        imagejpeg($image, $dist);
+
+        imagedestroy($image);
+
+        self::checkPhoto($idProduct);
+    }
 
 }
