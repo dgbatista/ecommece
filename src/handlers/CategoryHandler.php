@@ -2,6 +2,8 @@
 namespace src\handlers;
 
 use \src\models\Categorie;
+use \src\models\Product;
+use \src\models\ProductsCategorie;
 
 class CategoryHandler {
 
@@ -60,6 +62,38 @@ class CategoryHandler {
     public static function delete($idcategory){
         Categorie::delete()
             ->where('idcategory', $idcategory)
+        ->execute();
+    }
+
+    public static function getProducts($related = true, $idcategory){
+
+        if($related){
+            return ProductsCategorie::select()
+                ->join('products', 'productscategories.idproduct', '=' , 'products.idproduct')
+                ->where('idcategory', $idcategory)
+            ->get();
+        } else {
+            return ProductsCategorie::select()
+                ->join('products', 'productscategories.idproduct', '=' , 'products.idproduct')
+                ->whereNotIn('idcategory', [$idcategory])
+            ->get();
+        }
+    }
+
+    /*Vincula um produto a uma categoria*/
+    public static function addProduct($idcategory, $idproduct){
+
+        ProductsCategorie::insert([
+            'idcategory' => $idcategory,
+            'idproduct' => $idproduct
+            ]) 
+        ->execute();
+    }
+
+    public static function removeProduct($idcategory, $idproduct){
+        ProductsCategorie::delete()
+            ->where('idcategory', $idcategory)
+            ->where('idproduct', $idproduct)
         ->execute();
     }
 

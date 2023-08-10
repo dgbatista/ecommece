@@ -1,1 +1,1 @@
-<li><a href="<?=$base;?>/categories/1">Categoria</a></li><li><a href="<?=$base;?>/categories/3">teste 1234</a></li><li><a href="<?=$base;?>/categories/5">Nova Categoria</a></li><li><a href="<?=$base;?>/categories/6">Nova categoria</a></li>
+<li><a href="<?=$base;?>/categories/1">Android</a></li><li><a href="<?=$base;?>/categories/3">teste 1234</a></li><li><a href="<?=$base;?>/categories/5">Nova Categoria</a></li><li><a href="<?=$base;?>/categories/6">Nova categoria</a></li>

@@ -121,6 +121,38 @@ class CategoryController extends Controller {
 
     }
 
-    
+    public function cat_products($args){
+        $idcategory = $args['id'];
+
+        $category = CategoryHandler::getCategoryById($idcategory);
+
+        $productsNotRelated = CategoryHandler::getProducts(false, $idcategory);
+        $productsRelated = CategoryHandler::getProducts(true, $idcategory);
+
+        $this->render('admin/categories-products', [
+            'category' => $category,
+            'productsNotRelated' => CategoryHandler::getProducts(false, $idcategory),
+            'productsRelated' => CategoryHandler::getProducts(true, $idcategory),
+            'pageActive' => $this->pageActive
+        ]);
+    }    
+
+    public function add($args){
+        $idcategory = $args['idcategory'];
+        $idproducts = $args['idproduct'];
+
+        CategoryHandler::addProduct($idcategory, $idproducts);
+
+        $this->redirect('/admin/categories/'.$idcategory.'/products');
+    }
+
+    public function remove($args){
+        $idcategory = $args['idcategory'];
+        $idproducts = $args['idproduct'];
+
+
+        CategoryHandler::removeProduct($idcategory, $idproducts);
+        $this->redirect('/admin/categories/'.$idcategory.'/products');
+    }
 
 }

@@ -30,7 +30,7 @@
                   <tr>
                     <th style="width: 10px">#</th>
                     <th>Nome da Categoria</th>
-                    <th style="width: 140px">&nbsp;</th>
+                    <th style="width: 240px">&nbsp;</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -39,6 +39,7 @@
                       <td><?=$category->idcategory;?></td>
                       <td><?=$category->descategory;?></td>
                       <td>
+                        <a href="<?=$base;?>/admin/categories/<?=$category->idcategory;?>/products" class="btn btn-default btn-xs"><i class="fa fa-edit"></i> Produtos</a>
                         <a href="<?=$base;?>/admin/categories/<?=$category->idcategory;?>" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Editar</a>
                         <a href="<?=$base;?>/admin/categories/<?=$category->idcategory;?>/delete" onclick="return confirm('Deseja realmente excluir este registro?')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> Excluir</a>
                       </td>

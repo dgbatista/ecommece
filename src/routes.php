@@ -8,9 +8,7 @@ $router = new Router();
 $router->get('/', 'HomeController@index');
 $router->get('/login', 'UserController@signin');
 $router->get('/cadastro', 'UserController@signup');
-
 $router->get('/categories/{id}', 'CategoryController@index');
-
 
 /**ADMIN */
 $router->get('/admin/login', 'UserController@admin_signin');
@@ -23,18 +21,20 @@ $router->get('/admin/users/create', 'UserController@create');
 $router->post('/admin/users/create', 'UserController@createAction');
 $router->get('/admin/users', 'UserController@index');
 $router->get('/admin', 'AdminController@index');
-
 $router->get('/logout', 'HomeController@logout');
 
 /*CATEGORIES*/
 $router->get('/admin/categories/create','CategoryController@create');
 $router->post('/admin/categories/create', 'CategoryController@create');
-
+$router->get('/admin/categories/{idcategory}/products/{idproduct}/remove', 'CategoryController@remove');
+$router->get('/admin/categories/{idcategory}/products/{idproduct}/add', 'CategoryController@add');
+$router->get('/admin/categories/{id}/products', 'CategoryController@cat_products');
 $router->get('/admin/categories/{id}/delete', 'CategoryController@delete');
 $router->get('/admin/categories/{id}', 'CategoryController@update');
 $router->post('/admin/categories/{id}', 'CategoryController@update');
 $router->get('/admin/categories', 'CategoryController@index_admin');
 
+/*PRODUTOS*/
 $router->get('/admin/products/{id}/delete', 'ProductController@delete');
 $router->get('/admin/products/create', 'ProductController@create');
 $router->post('/admin/products/create', 'ProductController@create');

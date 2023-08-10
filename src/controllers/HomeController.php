@@ -30,4 +30,10 @@ class HomeController extends Controller {
             $this->redirect('/admin/login');
         }
     }
+
+    public function test() {
+
+        $this->render('test', [
+        ]);
+    }
 }
