@@ -109,11 +109,12 @@ class CategoryController extends Controller {
         $idcategory = (int)$args['id'];
 
         $category = CategoryHandler::getCategoryById($idcategory);
-        
+        $products = CategoryHandler::getProducts(true, $idcategory);
+
         if($category){
             $this->render('category',[
                 'category' => $category,
-                'products' => []
+                'products' => $products
             ]);
         } else {
             $this->redirect('index');
@@ -131,8 +132,8 @@ class CategoryController extends Controller {
 
         $this->render('admin/categories-products', [
             'category' => $category,
-            'productsNotRelated' => CategoryHandler::getProducts(false, $idcategory),
-            'productsRelated' => CategoryHandler::getProducts(true, $idcategory),
+            'productsNotRelated' => $productsNotRelated,
+            'productsRelated' =>  $productsRelated,
             'pageActive' => $this->pageActive
         ]);
     }    

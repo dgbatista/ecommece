@@ -22,11 +22,11 @@
             <div class="col-md-3 col-sm-6">
                 <div class="single-shop-product">
                     <div class="product-upper">
-                        <img src="<?=$base?>/assets/site/img/product-2.jpg" alt="">
+                        <img src="<?=$base?>/assets/site/img/products/<?=$item['idproduct']?>.jpg" alt="">
                     </div>
-                    <h2><a href="">Apple new mac book 2015 March :P</a></h2>
+                    <h2><a href=""><?=$item['desproduct']?></a></h2>
                     <div class="product-carousel-price">
-                        <ins>$899.00</ins> <del>$999.00</del>
+                        <ins>$<?=$item['vlprice']?></ins> <!--<del>$999.00</del> -->
                     </div>  
                     
                     <div class="product-option-shop">

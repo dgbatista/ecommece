@@ -68,14 +68,15 @@ class CategoryHandler {
     public static function getProducts($related = true, $idcategory){
 
         if($related){
-            return ProductsCategorie::select()
-                ->join('products', 'productscategories.idproduct', '=' , 'products.idproduct')
+
+            return Product::select()
+                ->join('productscategories', 'products.idproduct', '=' , 'productscategories.idproduct')
                 ->where('idcategory', $idcategory)
             ->get();
-        } else {
-            return ProductsCategorie::select()
-                ->join('products', 'productscategories.idproduct', '=' , 'products.idproduct')
-                ->whereNotIn('idcategory', [$idcategory])
+
+        } else { 
+
+            return Product::select()
             ->get();
         }
     }
@@ -83,20 +84,51 @@ class CategoryHandler {
     /*Vincula um produto a uma categoria*/
     public static function addProduct($idcategory, $idproduct){
 
-        ProductsCategorie::insert([
-            'idcategory' => $idcategory,
-            'idproduct' => $idproduct
-            ]) 
-        ->execute();
-    }
+            $product = ProductsCategorie::select()
+                ->where('idcategory', $idcategory)
+                ->where('idproduct', $idproduct)
+            ->one();
+
+            if($product){
+                ProductsCategorie::update([
+                    'idcategory' => $idcategory,
+                    'idproduct' => $idproduct
+                    ]) 
+                    ->where('idcategory', $product['idcategory'])
+                    ->where('idproduct', $product['idproduct'])
+                ->execute();
+                
+            } else {
+                ProductsCategorie::insert([
+                    'idcategory' => $idcategory,
+                    'idproduct' => $idproduct
+                    ]) 
+                ->execute();
+            }
+    }       
 
     public static function removeProduct($idcategory, $idproduct){
+                
         ProductsCategorie::delete()
             ->where('idcategory', $idcategory)
             ->where('idproduct', $idproduct)
         ->execute();
     }
 
+    public static function listProduct($list){
+
+        $return = [];
+
+        foreach($list as $item){
+            $array = [];
+            $array['idproduct'] = $item['idproduct'];
+            $array['desproduct'] = $item['desproduct'];
+
+            $return[] = $array;
+        }       
+
+        return $array;
+    }
     
 
 }
