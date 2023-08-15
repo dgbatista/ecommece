@@ -67,4 +67,8 @@ class SiteController extends Controller {
             $this->redirect('index');
         }   
     }
+
+    public function products(){
+        echo 'produtos';
+    }
 }

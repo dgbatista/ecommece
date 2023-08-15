@@ -76,13 +76,13 @@
             <div class="row">
                 <div class="col-sm-6">
                     <div class="logo">
-                        <h1><a href="#"><img src="<?=$base;?>/assets/site/img/logo.png"></a></h1>
+                        <h1><a href="<?=$base;?>"><img src="<?=$base;?>/assets/site/img/logo.png"></a></h1>
                     </div>
                 </div>
                 
                 <div class="col-sm-6">
                     <div class="shopping-item">
-                        <a href="<?=$base;?>/carrinho.php">Carrinho - <span class="cart-amunt">R$100</span> <i class="fa fa-shopping-cart"></i> <span class="product-count">5</span></a>
+                        <a href="<?=$base;?>/cart">Carrinho - <span class="cart-amunt">R$100</span> <i class="fa fa-shopping-cart"></i> <span class="product-count">5</span></a>
                     </div>
                 </div>
             </div>
@@ -103,8 +103,8 @@
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
                         <li class="<?=($menuCurrent=='home')?'active': '';?>"><a href="<?=$base;?>/">Home</a></li>
-                        <li class="<?=($menuCurrent=='products')?'active': '';?>"><a href="<?=$base;?>/">Produtos</a></li>
-                        <li class="<?=($menuCurrent=='cart')?'active': '';?>"><a href="<?=$base;?>/">Carrinho</a></li>
+                        <li class="<?=($menuCurrent=='products')?'active': '';?>"><a href="<?=$base;?>/products">Produtos</a></li>
+                        <li class="<?=($menuCurrent=='cart')?'active': '';?>"><a href="<?=$base;?>/cart">Carrinho</a></li>
                     </ul>
                 </div>  
             </div>

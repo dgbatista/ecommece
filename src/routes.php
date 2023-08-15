@@ -10,6 +10,8 @@ $router->get('/login', 'UserController@signin');
 $router->get('/cadastro', 'UserController@signup');
 $router->get('/categories/{id}', 'SiteController@categories');
 $router->get('/products/{desurl}', 'SiteController@product');
+$router->get('/products' , 'SiteController@products');
+$router->get('/cart' , 'CartController@index');
 
 /**ADMIN */
 $router->get('/admin/login', 'UserController@admin_signin');

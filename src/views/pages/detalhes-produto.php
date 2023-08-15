@@ -1,6 +1,6 @@
 <?=$render('site/header', ['menuCurrent' => $menuCurrent]);?>
 
-<?php echo '<pre>'; print_r($product); echo '</pre>' ?>
+<?php //echo '<pre>'; print_r($product); echo '</pre>' ?>
     
     <div class="product-big-title-area">
         <div class="container">
