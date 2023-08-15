@@ -17,27 +17,29 @@
     <div class="container">
         <div class="row">
 
-        <?php foreach ($products as $item):?>
+            <?php foreach ($products['products'] as $item):?>
 
-            <div class="col-md-3 col-sm-6">
-                <div class="single-shop-product">
-                    <div class="product-upper">
-                        <img src="<?=$base?>/assets/site/img/products/<?=$item['idproduct']?>.jpg" alt="">
+                <div class="col-md-3 col-sm-6">
+                    <div class="single-shop-product">
+                        <div class="product-upper">
+                            <img src="<?=$base?>/assets/site/img/products/<?=$item['idproduct']?>.jpg" alt="">
+                        </div>
+                        <h2><a href="<?=$base;?>/products/<?=$item['desurl']?>"><?=$item['desproduct']?></a></h2>
+                        <div class="product-carousel-price">
+                            <ins>R$<?=$item['vlprice']?></ins> <!--<del>$999.00</del> -->
+                        </div>  
+                        
+                        <div class="product-option-shop">
+                            <a class="add_to_cart_button" data-quantity="1" data-product_sku="" data-product_id="70" rel="nofollow" href="/canvas/shop/?add-to-cart=70">Comprar</a>
+                        </div>                       
                     </div>
-                    <h2><a href=""><?=$item['desproduct']?></a></h2>
-                    <div class="product-carousel-price">
-                        <ins>$<?=$item['vlprice']?></ins> <!--<del>$999.00</del> -->
-                    </div>  
-                    
-                    <div class="product-option-shop">
-                        <a class="add_to_cart_button" data-quantity="1" data-product_sku="" data-product_id="70" rel="nofollow" href="/canvas/shop/?add-to-cart=70">Add to cart</a>
-                    </div>                       
                 </div>
-            </div>
 
-        <?php endforeach; ?>
+            <?php endforeach; ?>
 
         </div>
+
+        Page Count:<?=$products['pageCount'];?>
         
         <div class="row">
             <div class="col-md-12">
@@ -45,17 +47,15 @@
                     <nav>
                         <ul class="pagination">
                         <li>
-                            <a href="#" aria-label="Previous">
+                            <a href="<?=$base;?>/categories/<?=$category->idcategory;?>?page=<?=(($page-1) < 0)? 0 : $page-1 ;?>" aria-label="Previous">
                             <span aria-hidden="true">«</span>
                             </a>
                         </li>
-                        <li><a href="#">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">4</a></li>
-                        <li><a href="#">5</a></li>
+                            <?php for($q=0; $q< $products['pageCount']; $q++):?>
+                                <li><a href="<?=$base;?>/categories/<?=$category->idcategory;?>?page=<?=$q;?>"><?=$q+1;?></a></li>
+                            <?php endfor; ?>
                         <li>
-                            <a href="#" aria-label="Next">
+                            <a href="<?=$base;?>/categories/<?=$category->idcategory;?>?page=<?=(($page+1) >= $products['pageCount'])?$page:$page+1 ;?>" aria-label="Next">
                             <span aria-hidden="true">»</span>
                             </a>
                         </li>

@@ -8,7 +8,7 @@ $router = new Router();
 $router->get('/', 'HomeController@index');
 $router->get('/login', 'UserController@signin');
 $router->get('/cadastro', 'UserController@signup');
-$router->get('/categories/{id}', 'CategoryController@index');
+$router->get('/categories/{id}', 'HomeController@categories');
 
 /**ADMIN */
 $router->get('/admin/login', 'UserController@admin_signin');

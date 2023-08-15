@@ -81,6 +81,32 @@ class CategoryHandler {
         }
     }
 
+    public static function getProductsPerPage($related = true, $idcategory, $page){
+
+        $perPage = 2;
+
+        if($related){
+
+            $products = Product::select()
+                ->join('productscategories', 'products.idproduct', '=' , 'productscategories.idproduct')
+                ->where('idcategory', $idcategory)
+                ->page($page, $perPage)
+            ->get();
+
+            $total = Product::select()
+                ->join('productscategories', 'products.idproduct', '=' , 'productscategories.idproduct')
+                ->where('idcategory', $idcategory)
+            ->count();
+            $pageCount = ceil($total / $perPage);
+
+            return [
+                'products'=> $products,
+                'pageCount' => $pageCount
+            ];
+
+        }
+    }
+
     /*Vincula um produto a uma categoria*/
     public static function addProduct($idcategory, $idproduct){
 

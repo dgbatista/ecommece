@@ -4,6 +4,7 @@ namespace src\controllers;
 use \core\Controller;
 use \src\handlers\UserHandler;
 use \src\handlers\ProductHandler;
+use \src\handlers\CategoryHandler;
 
 class HomeController extends Controller {
 
@@ -31,9 +32,22 @@ class HomeController extends Controller {
         }
     }
 
-    public function test() {
+    public function categories($args){
+        $idcategory = (int)$args['id'];
+        $page = intval(filter_input(INPUT_GET, 'page'));
 
-        $this->render('test', [
-        ]);
+        $category = CategoryHandler::getCategoryById($idcategory);
+        $products = CategoryHandler::getProductsPerPage(true, $idcategory, $page);
+
+        if($category){
+            $this->render('category',[
+                'category' => $category,
+                'products' => $products,
+                'page'=> $page
+            ]);
+        } else {
+            $this->redirect('index');
+        }      
+
     }
 }

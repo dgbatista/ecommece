@@ -55,7 +55,7 @@
             <div class="row">
                 <div class="col-md-8">
                     <div class="copyright">
-                        <p>&copy; 2023 Douglas. <a href="http://www.douglasbatista.com.br" target="_blank">douglasbatista.com</a></p>
+                        <p>&copy; 2023 Douglas. <a href="http://www.douglasbatista.com" target="_blank">douglasbatista.com</a></p>
                     </div>
                 </div>
                 

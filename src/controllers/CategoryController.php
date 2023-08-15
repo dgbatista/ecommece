@@ -105,23 +105,6 @@ class CategoryController extends Controller {
             . "categories-menu.php", implode('', $html));
     }
 
-    public function index($args){
-        $idcategory = (int)$args['id'];
-
-        $category = CategoryHandler::getCategoryById($idcategory);
-        $products = CategoryHandler::getProducts(true, $idcategory);
-
-        if($category){
-            $this->render('category',[
-                'category' => $category,
-                'products' => $products
-            ]);
-        } else {
-            $this->redirect('index');
-        }      
-
-    }
-
     public function cat_products($args){
         $idcategory = $args['id'];
 
