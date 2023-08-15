@@ -102,9 +102,9 @@
                 </div> 
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        <li class="active"><a href="<?=$base;?>/">Home</a></li>
-                        <li><a href="#">Produtos</a></li>
-                        <li><a href="#">Carrinho</a></li>
+                        <li class="<?=($menuCurrent=='home')?'active': '';?>"><a href="<?=$base;?>/">Home</a></li>
+                        <li class="<?=($menuCurrent=='products')?'active': '';?>"><a href="<?=$base;?>/">Produtos</a></li>
+                        <li class="<?=($menuCurrent=='cart')?'active': '';?>"><a href="<?=$base;?>/">Carrinho</a></li>
                     </ul>
                 </div>  
             </div>

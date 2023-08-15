@@ -2,6 +2,7 @@
 namespace src\handlers;
 
 use \src\models\Product;
+use \src\models\ProductsCategorie;
 
 class ProductHandler {
 
@@ -147,6 +148,27 @@ class ProductHandler {
         imagedestroy($image);
 
         self::checkPhoto($idProduct);
+    }
+
+    public static function getFromURL($desurl){
+
+        $data = Product::select()
+            ->where('desurl', $desurl)
+        ->one();
+
+        if($data){
+            $product = self::productArrayToObject($data);
+            return $product;
+        }
+        return false;
+    }
+
+    public static function getCategories($idproduct) {
+
+        return ProductsCategorie::select()
+                ->join('categories', 'productsCategories.idcategory', '=', 'categories.idcategory')
+            ->where('idproduct', $idproduct)
+        ->get();
     }
 
 }

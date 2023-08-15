@@ -5,10 +5,11 @@ use core\Router;
 $router = new Router();
 
 /**SITE */
-$router->get('/', 'HomeController@index');
+$router->get('/', 'SiteController@index');
 $router->get('/login', 'UserController@signin');
 $router->get('/cadastro', 'UserController@signup');
-$router->get('/categories/{id}', 'HomeController@categories');
+$router->get('/categories/{id}', 'SiteController@categories');
+$router->get('/products/{desurl}', 'SiteController@product');
 
 /**ADMIN */
 $router->get('/admin/login', 'UserController@admin_signin');
@@ -21,7 +22,7 @@ $router->get('/admin/users/create', 'UserController@create');
 $router->post('/admin/users/create', 'UserController@createAction');
 $router->get('/admin/users', 'UserController@index');
 $router->get('/admin', 'AdminController@index');
-$router->get('/logout', 'HomeController@logout');
+$router->get('/logout', 'SiteController@logout');
 
 /*CATEGORIES*/
 $router->get('/admin/categories/create','CategoryController@create');

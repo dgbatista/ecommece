@@ -6,7 +6,7 @@ use \src\handlers\UserHandler;
 use \src\handlers\ProductHandler;
 use \src\handlers\CategoryHandler;
 
-class HomeController extends Controller {
+class SiteController extends Controller {
 
     // private $loggedUser;
 
@@ -21,7 +21,8 @@ class HomeController extends Controller {
         $products = ProductHandler::getProducts();
 
         $this->render('index', [
-            'products' => $products
+            'products' => $products,
+            'menuCurrent' => 'home'
         ]);
     }
 
@@ -48,6 +49,22 @@ class HomeController extends Controller {
         } else {
             $this->redirect('index');
         }      
+    }
 
+    public function product($args){
+        $desurl = $args['desurl'];
+
+        $product = ProductHandler::getFromURL($desurl);
+        $categories = ProductHandler::getCategories($product->idproduct);
+
+        if($product){
+            $this->render('detalhes-produto',[
+                'product' => $product,
+                'categories' => $categories,
+                'menuCurrent' => 'products'
+            ]);
+        } else {
+            $this->redirect('index');
+        }   
     }
 }

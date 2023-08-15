@@ -1,4 +1,4 @@
-<?php $render('site/header'); ?>
+<?php $render('site/header', ['menuCurrent' => $menuCurrent]); ?>
 
 <div class="slider-area">
         	<!-- Slider -->
