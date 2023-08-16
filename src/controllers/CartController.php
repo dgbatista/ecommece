@@ -8,10 +8,8 @@ use \src\models\Cart;
 class CartController extends Controller {
 
     public function index(){
-        
-        $cart = new Cart();
 
-        // CartHandler::save($cart);
+        $cart = CartHandler::getFromSession();
 
         $this->render('cart', [
             'menuCurrent' => 'cart'
