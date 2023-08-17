@@ -11,9 +11,13 @@ class CartHandler {
     const SESSION = "Cart";
 
     private static function transformCartToObject($array){
+
         $cart = new Cart();
-        $cart->idcart = $array['idcart'] ?? 0;
-        $cart->dessessionid = $array['dessessionid'];
+
+        if(!empty($array['idcart'])){
+            $cart->idcart = $array['idcart'];       
+        }
+        $cart->dessessionid = $array['dessessionid'] ?? '';
         $cart->iduser = $array['iduser'] ?? null;
         $cart->deszipcode = $array['deszipcode'] ?? null;
         $cart->vlfreight = $array['vlfreight'] ?? null;
@@ -23,25 +27,30 @@ class CartHandler {
     }
 
     public static function getFromSession(){
+
         $cart = new Cart();
 
-            $cart = self::transformCartToObject(self::getFromSessionID());
+            $cart = self::getFromSessionID(session_id());
+
+            if($cart){
+                self::setToSession($cart);
+            }
 
             if(!$cart){
-                
-                $data = [
-                    'dessessionid'=>session_id()
-                ];
+
+                $data['dessessionid'] = session_id();
 
                 $user = UserHandler::checkLogin();
-
+                
                 if($user){
-                    $data['iduser'] = $user->iduser;                    
+                    $data['iduser'] = $user->iduser;                   
                 }
 
-                $cart = self::transformCartToObject($data);
-
+                $cart = self::transformCartToObject($data);  
+                
                 self::save($cart);
+                
+                $c = self::getFromSessionID($data['dessessionid']);
 
                 self::setToSession($cart);
             }
@@ -51,7 +60,7 @@ class CartHandler {
 
     public static function setToSession(Cart $cart){
     
-        $_SESSION['Cart'] = $cart;
+        $_SESSION['cart'] = $cart;
 
     }
 
@@ -65,12 +74,12 @@ class CartHandler {
         return false;
     }
 
-    public static function getFromSessionID(){
-        $data = Cart::select()->where('dessessionid', session_id())->one();
+    public static function getFromSessionID($idsession = ''){
+        $data = Cart::select()->where('dessessionid', $idsession)->one();
 
-        if($data){
-            // $cart = self::transformCartToObject($data);
-            return $data;
+        if($data){            
+            $cart = self::transformCartToObject($data);
+            return $cart;
         }
         
         return false;
@@ -78,7 +87,6 @@ class CartHandler {
 
     public static function save(Cart $cart){
         Cart::insert([
-            'idcart' => $cart->idcart,
             'dessessionid'=>$cart->dessessionid,
             'iduser'=>$cart->iduser,
             'deszipcode'=>$cart->deszipcode,
@@ -88,7 +96,7 @@ class CartHandler {
     }
 
     public static function addProducToCart(Product $product, $idcart){
-
+        
         CartsProduct::insert([
             'idcart' => $idcart,
             'idproduct' => $product->idproduct

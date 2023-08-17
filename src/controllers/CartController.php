@@ -9,6 +9,12 @@ use \src\handlers\ProductHandler;
 
 class CartController extends Controller {
 
+    public $cart;
+
+    public function __construct(){
+        $this->cart = CartHandler::getFromSession();
+    }
+
     public function index(){
 
         $cart = CartHandler::getFromSession();
