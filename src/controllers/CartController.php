@@ -37,7 +37,7 @@ class CartController extends Controller {
         $cart = CartHandler::getFromSession();
         $product = ProductHandler::getProductById($idproduct);
 
-        CartHandler::addProducToCart($product, $cart->idcart);
+        CartHandler::removeProductToCart($product, $cart->idcart);
 
         $this->redirect('/cart');
     }

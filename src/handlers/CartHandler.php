@@ -25,15 +25,10 @@ class CartHandler {
     public static function getFromSession(){
         $cart = new Cart();
 
-        if(isset($_SESSION['Cart']) && (int)$_SESSION['idcart']>0){
-
-            $cart = self::get((int)$_SESSION['Cart']['idcart']);
-
-        } else {
-
-            $cart = self::getFromSessionID();
+            $cart = self::transformCartToObject(self::getFromSessionID());
 
             if(!$cart){
+                
                 $data = [
                     'dessessionid'=>session_id()
                 ];
@@ -50,7 +45,6 @@ class CartHandler {
 
                 self::setToSession($cart);
             }
-        }
 
         return $cart;
     }
@@ -75,8 +69,8 @@ class CartHandler {
         $data = Cart::select()->where('dessessionid', session_id())->one();
 
         if($data){
-            $cart = self::transformCartToObject($data);
-            return $cart;
+            // $cart = self::transformCartToObject($data);
+            return $data;
         }
         
         return false;
@@ -129,6 +123,7 @@ class CartHandler {
             ->join('products', 'cartsproducts.idproduct', '=', 'products.idproduct')
             ->where('idcart', $idcart)
             ->whereNull('dtremoved')
+            ->groupBy('products.idproduct')
             ->orderBy('products.desproduct')
         ->get();
 
