@@ -18,11 +18,13 @@ class CartController extends Controller {
     public function index(){
 
         $cart = CartHandler::getFromSession();
-        $products = CartHandler::getProducts($cart->idcart);
+        $products = CartHandler::getProducts();
 
         $this->render('cart', [
             'menuCurrent' => 'cart',
-            'products' => $products
+            'products' => $products['carts'],
+            'total' => $products['total'],
+            'vltotal' => $products['vltotal']
         ]);
 
     }

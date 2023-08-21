@@ -39,19 +39,20 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <?php //echo '<pre>'; print_r($products); ?>
                                     
-                                    <?php foreach($products as $product):?>
+                                    <?php foreach($products as $product):?>                                        
                                         <tr class="cart_item">
                                             <td class="product-remove">
                                                 <a title="Remove this item" class="remove" href="<?=$base;?>/cart/<?=$product->idproduct?>/remove">×</a> 
                                             </td>
 
                                             <td class="product-thumbnail">
-                                                <a href="<?=$base;?>/product/<?=$product->desurl;?>"><img width="145" height="145" alt="poster_1_up" class="shop_thumbnail" src="<?=$base?>/assets/site/img/products/<?=$product->idproduct.'.jpg'?>"></a>
+                                                <a href="<?=$base;?>/products/<?=$product->desurl;?>"><img width="145" height="145" alt="poster_1_up" class="shop_thumbnail" src="<?=$base?>/assets/site/img/products/<?=$product->idproduct.'.jpg'?>"></a>
                                             </td>
 
                                             <td class="product-name">
-                                                <a href="<?=$base;?>/product/<?=$product->desurl;?>"><?=$product->desproduct?></a> 
+                                                <a href="<?=$base;?>/products/<?=$product->desurl;?>"><?=$product->desproduct?></a> 
                                             </td>
 
                                             <td class="product-price">
@@ -61,13 +62,13 @@
                                             <td class="product-quantity">
                                                 <div class="quantity buttons_added">
                                                     <input type="button" class="minus" value="-" onclick="window.location.href = '<?=$base;?>/cart/<?=$product->idproduct;?>/minus'">
-                                                    <input type="number" size="4" class="input-text qty text" title="Qty" value="<?=$product->nrqtd?>" min="0" step="1">
+                                                    <input type="number" size="4" class="input-text qty text" title="Qty" value="<?=$total?>" min="0" step="1" disabled/>
                                                     <input type="button" class="plus" value="+" onclick="window.location.href = '<?=$base;?>/cart/<?=$product->idproduct;?>/add'">
                                                 </div>
                                             </td>
 
                                             <td class="product-subtotal">
-                                                <span class="amount">R$<?=$product->vltotal?></span> 
+                                                <span class="amount">R$<?=$vltotal?></span> 
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>

@@ -32,10 +32,6 @@ class CartHandler {
 
             $cart = self::getFromSessionID(session_id());
 
-            if($cart){
-                self::setToSession($cart);
-            }
-
             if(!$cart){
 
                 $data['dessessionid'] = session_id();
@@ -52,8 +48,9 @@ class CartHandler {
                 
                 $c = self::getFromSessionID($data['dessessionid']);
 
-                self::setToSession($cart);
             }
+
+            self::setToSession($cart);
 
         return $cart;
     }
@@ -96,7 +93,7 @@ class CartHandler {
     }
 
     public static function addProducToCart(Product $product, $idcart){
-        
+
         CartsProduct::insert([
             'idcart' => $idcart,
             'idproduct' => $product->idproduct
@@ -126,30 +123,52 @@ class CartHandler {
         }
     }
 
-    public static function getProducts($idcart){
+    public static function getProducts(){
+
+        $cart = $_SESSION['cart'];
+
         $data = CartsProduct::select()
             ->join('products', 'cartsproducts.idproduct', '=', 'products.idproduct')
-            ->where('idcart', $idcart)
+            ->where('idcart', $cart->idcart)
             ->whereNull('dtremoved')
             ->groupBy('products.idproduct')
-            ->orderBy('products.desproduct')
         ->get();
 
         $total = CartsProduct::select()
             ->join('products', 'cartsproducts.idproduct', '=', 'products.idproduct')
-            ->where('idcart', $idcart)
+            ->where('idcart', $cart->idcart)
+            ->whereNull('dtremoved')
+            ->groupBy('products.idproduct')
         ->count();
 
         $cart = self::arrayToCartObject($data);
 
-        return $cart;
+        foreach($cart['carts'] as $key => $item){
+            $cart['qtd_product']["$item->idproduct"] = self::getProductsById($item->idcart, $item->idproduct);
+        }
+
+        $array['carts'] = $cart['carts'];
+        $array['total'] = $total;
+        $array['vltotal'] = $cart['sumProduct'];
+
+        return $array;
+    }
+
+    public static function getProductsById($idcart, $idproduct){
+
+        $data = CartsProduct::select()
+            ->where('idcart', $idcart)
+            ->where('idproduct', $idproduct)
+            ->whereNull('dtremoved')
+        ->count();        
+
+        return $data;
     }
 
     public static function arrayToCartObject($arrays){
 
         $carts = [];
-        $totalPrice = 0;
-        $nrqtd = 0;
+        $sumProducts = 0;
 
         if(count($arrays)>0){
             foreach($arrays as $array){
@@ -165,16 +184,13 @@ class CartHandler {
                 $cart->vllength = $array['vllength'] ?? 0;
                 $cart->vlweight = $array['vlweight'] ?? 0;
                 $cart->desurl = $array['desurl']?? '';
-                
-                $totalPrice += $cart->vlprice;
-                $nrqtd++;
 
-                $carts[] = $cart;
+                $sumProducts += $cart->vlprice;
+
+                $carts['carts'][] = $cart;
             }
-            $carts[0]->vltotal = $totalPrice;
-            $carts[0]->nrqtd = $nrqtd;
+            $carts['sumProduct'] = $sumProducts;
         }       
-
         return $carts;
     }
 
