@@ -141,15 +141,19 @@ class CartHandler {
             ->groupBy('products.idproduct')
         ->count();
 
+        $array['total'] = $total;  
+
         $cart = self::arrayToCartObject($data);
 
-        foreach($cart['carts'] as $key => $item){
-            $cart['qtd_product']["$item->idproduct"] = self::getProductsById($item->idcart, $item->idproduct);
-        }
-
-        $array['carts'] = $cart['carts'];
-        $array['total'] = $total;
-        $array['vltotal'] = $cart['sumProduct'];
+        if(!empty($cart)){
+            foreach($cart['carts'] as $item){
+                $cart['qtd_product']["$item->idproduct"] = self::getProductsById($item->idcart, $item->idproduct);
+            }
+        } 
+        
+        $array['carts'] = $cart['carts'] ?? [];
+        $array['vltotal'] = 0;
+        $array['qtd_product'] = $cart['qtd_product'] ?? [];
 
         return $array;
     }

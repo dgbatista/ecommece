@@ -62,7 +62,7 @@
                                             <td class="product-quantity">
                                                 <div class="quantity buttons_added">
                                                     <input type="button" class="minus" value="-" onclick="window.location.href = '<?=$base;?>/cart/<?=$product->idproduct;?>/minus'">
-                                                    <input type="number" size="4" class="input-text qty text" title="Qty" value="<?=$total?>" min="0" step="1" disabled/>
+                                                    <input type="number" size="4" class="input-text qty text" title="Qty" value="<?=$qtd[$product->idproduct]?>" min="0" step="1" disabled/>
                                                     <input type="button" class="plus" value="+" onclick="window.location.href = '<?=$base;?>/cart/<?=$product->idproduct;?>/add'">
                                                 </div>
                                             </td>

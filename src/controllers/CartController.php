@@ -23,6 +23,7 @@ class CartController extends Controller {
         $this->render('cart', [
             'menuCurrent' => 'cart',
             'products' => $products['carts'],
+            'qtd' => $products['qtd_product'],
             'total' => $products['total'],
             'vltotal' => $products['vltotal']
         ]);
