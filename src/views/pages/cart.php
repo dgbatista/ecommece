@@ -68,7 +68,7 @@
                                             </td>
 
                                             <td class="product-subtotal">
-                                                <span class="amount">R$<?=$vltotal?></span> 
+                                                <span class="amount">R$<?=$product->total;?></span> 
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>

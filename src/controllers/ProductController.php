@@ -46,7 +46,7 @@ class ProductController extends Controller {
             $newProduct->vlheight = $vlheight;
             $newProduct->vllength = $vllength;
             $newProduct->vlweight = $vlweight;
-            $newProduct->desurl = strtolower(str_replace(' ','-', $desproduct));
+            $newProduct->desurl = strtolower(str_replace([' ', '.'],'-', $desproduct));
 
             ProductHandler::save($newProduct);
             $this->redirect('/admin/products');

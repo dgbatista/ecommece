@@ -139,20 +139,20 @@ class CartHandler {
             ->where('idcart', $cart->idcart)
             ->whereNull('dtremoved')
             ->groupBy('products.idproduct')
-        ->count();
-
-        $array['total'] = $total;  
+        ->count();  
 
         $cart = self::arrayToCartObject($data);
 
         if(!empty($cart)){
             foreach($cart['carts'] as $item){
-                $cart['qtd_product']["$item->idproduct"] = self::getProductsById($item->idcart, $item->idproduct);
+                $qtd = self::getProductsById($item->idcart, $item->idproduct);
+                $item->total = $qtd * $item->vlprice;
+                $cart['qtd_product']["$item->idproduct"] = $qtd;
             }
         } 
         
         $array['carts'] = $cart['carts'] ?? [];
-        $array['vltotal'] = 0;
+        $array['total'] = $total;
         $array['qtd_product'] = $cart['qtd_product'] ?? [];
 
         return $array;

@@ -17,6 +17,8 @@
     <div class="container">
         <div class="row">
 
+        <?php //echo '<pre>'; print_r($products); exit;?>
+
             <?php foreach ($products['products'] as $item):?>
 
                 <div class="col-md-3 col-sm-6">
@@ -30,7 +32,7 @@
                         </div>  
                         
                         <div class="product-option-shop">
-                            <a class="add_to_cart_button" data-quantity="1" data-product_sku="" data-product_id="70" rel="nofollow" href="<?=$base;?>/cart/<?=$item->idproduct;?>/add">Comprar</a>
+                            <a class="add_to_cart_button" data-quantity="1" data-product_sku="" data-product_id="70" rel="nofollow" href="<?=$base;?>/cart/<?=$item['idproduct'];?>/add">Comprar</a>
                         </div>                       
                     </div>
                 </div>
