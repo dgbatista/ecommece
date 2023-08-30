@@ -20,10 +20,6 @@ class CartController extends Controller {
         $cart = CartHandler::getFromSession();
         $products = CartHandler::getProducts();
 
-        // echo '<pre>';
-        // print_r($products);
-        // exit;
-
         $this->render('cart', [
             'menuCurrent' => 'cart',
             'products' => $products['carts'],
@@ -67,6 +63,24 @@ class CartController extends Controller {
         $this->redirect('/cart');
     }
 
+    /*MIN - MAX
+    Comprimento (C): 15 cm – 100 cm
+    Largura (L): 10 cm – 100 cm
+    Altura (A): 1 cm – 100 cm
+    Soma das dimensões (C+L+A): 25 cm – 200 cm */
+
+    public function freight(){
+
+        $zipcode = filter_input(INPUT_POST, 'zipcode');
+
+        $zipcode = str_replace('-', '', $zipcode);
+
+        $cart = CartHandler::getFromSession();
+        $products = CartHandler::getProducts();
+        
+        CartHandler::calcFreight($zipcode, $products['freight']);        
+
+    }
 
 
 }

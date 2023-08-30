@@ -135,7 +135,7 @@ class CartHandler {
             ->groupBy('products.idproduct')
         ->get();
 
-        $correio = CartsProduct::select()
+        $freight = CartsProduct::select()
             ->join('products as p', 'cartsproducts.idproduct', '=', 'p.idproduct')
             ->where('idcart', $cart->idcart)
             ->whereNull('dtremoved')
@@ -144,7 +144,8 @@ class CartHandler {
             ->addField(new Func('sum', 'p.vlheight'), 'vlheight')
             ->addField(new Func('sum', 'p.vllength'), 'vllength')
             ->addField(new Func('sum', 'p.vlweight'), 'vlweight')
-            ->get();
+            ->addField(new Func('count', 'p.idproduct'), 'qtd_products')
+        ->get();
 
         $total = CartsProduct::select()
             ->join('products', 'cartsproducts.idproduct', '=', 'products.idproduct')
@@ -161,11 +162,12 @@ class CartHandler {
                 $item->total = $qtd * $item->vlprice;
                 $cart['qtd_product']["$item->idproduct"] = $qtd;
             }
-        } 
-        
+        }
+
         $array['carts'] = $cart['carts'] ?? [];
         $array['total'] = $total;
         $array['qtd_product'] = $cart['qtd_product'] ?? [];
+        $array['freight'] = $freight[0] ?? [];
 
         return $array;
     }
@@ -208,6 +210,44 @@ class CartHandler {
             $carts['sumProduct'] = $sumProducts;
         }       
         return $carts;
+    }
+
+    public static function calcFreight($zipcode, $zipcodeInformation = []){
+
+        $totals = $zipcodeInformation['qtd_products'];
+
+        if($zipcodeInformation['vlheight'] < 2) $zipcodeInformation['vlheight'] = 2;
+        if($zipcodeInformation['vlwidth'] < 16) $zipcodeInformation['vlheight'] = 16;
+
+        if($totals > 0){
+
+            $qs = http_build_query([
+                'nCdEmpresa'=>'',
+                'sDsSenha'=>'',
+                'nCdServico'=>'40010',
+                'sCepOrigem'=>'11730000',
+                'sCepDestino'=>$zipcode,
+                'nVlPeso'=>$zipcodeInformation['vlweight'],
+                'nCdFormato'=>'1',
+                'nVlComprimento'=>$zipcodeInformation['vllength'],
+                'nVlAltura'=>$zipcodeInformation['vlheight'],
+                'nVlLargura'=>$zipcodeInformation['vlwidth'],
+                'nVlDiametro'=>'0',
+                'sCdMaoPropria'=>'S',
+                'nVlValorDeclarado'=>$zipcodeInformation['vlprice'],
+                'sCdAvisoRecebimento'=>'S',
+            ]);
+
+            $xml = (array)simplexml_load_file("http://ws.correios.com.br/calculador/CalcPrecoPrazo.asmx/CalcPrecoPrazo?".$qs);
+
+            echo '<pre>';
+            print_r($xml);
+            exit;
+
+        } else {
+
+        }
+
     }
 
 }

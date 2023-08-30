@@ -14,6 +14,7 @@ $router->get('/products' , 'SiteController@products');
 $router->get('/cart/{idproduct}/add', 'CartController@add');
 $router->get('/cart/{idproduct}/minus', 'CartController@minus');
 $router->get('/cart/{idproduct}/remove', 'CartController@remove');
+$router->post('/cart/freight', 'CartController@freight');
 $router->get('/cart' , 'CartController@index');
 
 
