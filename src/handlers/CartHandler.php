@@ -5,6 +5,7 @@ use \src\models\Cart;
 use \src\models\User;
 use \src\models\CartsProduct;
 use \src\models\Product;
+use ClanCats\Hydrahon\Query\Sql\Func;
 
 class CartHandler {
 
@@ -133,6 +134,17 @@ class CartHandler {
             ->whereNull('dtremoved')
             ->groupBy('products.idproduct')
         ->get();
+
+        $correio = CartsProduct::select()
+            ->join('products as p', 'cartsproducts.idproduct', '=', 'p.idproduct')
+            ->where('idcart', $cart->idcart)
+            ->whereNull('dtremoved')
+            ->addField(new Func('sum', 'p.vlprice'), 'vlprice')
+            ->addField(new Func('sum', 'p.vlwidth'), 'vlwidth')
+            ->addField(new Func('sum', 'p.vlheight'), 'vlheight')
+            ->addField(new Func('sum', 'p.vllength'), 'vllength')
+            ->addField(new Func('sum', 'p.vlweight'), 'vlweight')
+            ->get();
 
         $total = CartsProduct::select()
             ->join('products', 'cartsproducts.idproduct', '=', 'products.idproduct')

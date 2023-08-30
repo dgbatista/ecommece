@@ -20,6 +20,10 @@ class CartController extends Controller {
         $cart = CartHandler::getFromSession();
         $products = CartHandler::getProducts();
 
+        // echo '<pre>';
+        // print_r($products);
+        // exit;
+
         $this->render('cart', [
             'menuCurrent' => 'cart',
             'products' => $products['carts'],
