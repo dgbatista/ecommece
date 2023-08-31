@@ -212,12 +212,23 @@ class CartHandler {
         return $carts;
     }
 
+
+    /*MIN - MAX
+    Comprimento (C): < 105 && > 16 cm
+    Largura (L): < 105 && > 11 cm
+    Altura (A): < 105 && > 2 cm
+    Diametro (D): < 91 && > 5 cm
+    Soma das dimensões < 200 cm */
     public static function calcFreight($zipcode, $zipcodeInformation = []){
 
         $totals = $zipcodeInformation['qtd_products'];
 
         if($zipcodeInformation['vlheight'] < 2) $zipcodeInformation['vlheight'] = 2;
-        if($zipcodeInformation['vlwidth'] < 16) $zipcodeInformation['vlheight'] = 16;
+        if($zipcodeInformation['vlheight'] > 105) $zipcodeInformation['vlheight'] = 105;
+        if($zipcodeInformation['vlwidth'] < 11) $zipcodeInformation['vlwidth'] = 11;
+        if($zipcodeInformation['vlwidth'] > 105) $zipcodeInformation['vlwidth'] = 105;
+        if($zipcodeInformation['vllength'] > 105) $zipcodeInformation['vllength'] = 105;
+        if($zipcodeInformation['vllength'] < 16) $zipcodeInformation['vllength'] = 16;
 
         if($totals > 0){
 
@@ -240,9 +251,9 @@ class CartHandler {
 
             $xml = (array)simplexml_load_file("http://ws.correios.com.br/calculador/CalcPrecoPrazo.asmx/CalcPrecoPrazo?".$qs);
 
-            echo '<pre>';
-            print_r($xml);
-            exit;
+            $result = $xml['Servicos']->cServico;
+
+            return $result;
 
         } else {
 

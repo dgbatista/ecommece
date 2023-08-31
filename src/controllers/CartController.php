@@ -10,6 +10,7 @@ use \src\handlers\ProductHandler;
 class CartController extends Controller {
 
     public $cart;
+    public $flash;
 
     public function __construct(){
         $this->cart = CartHandler::getFromSession();
@@ -19,12 +20,26 @@ class CartController extends Controller {
 
         $cart = CartHandler::getFromSession();
         $products = CartHandler::getProducts();
+        $vlfreight = (isset($_SESSION['vlfreight'])) ? $_SESSION['vlfreight'] : '';
+        $deadline = (isset($_SESSION['deadline'])) ? $_SESSION['deadline'] : '';
+
+        $_SESSION['deadline'] = '';
+        $_SESSION['vlfreight'] = '';
+
+        if(isset($_SESSION['flash'])){ 
+            $this->flash = $_SESSION['flash'];
+            $_SESSION['flash'] = '';
+        }
 
         $this->render('cart', [
             'menuCurrent' => 'cart',
             'products' => $products['carts'],
             'qtd' => $products['qtd_product'],
-            'total' => $products['total']
+            'total' => $products['total'],
+            'flash' => $this->flash,
+            'vlfreight' => $vlfreight,
+            'deadline' => $deadline,
+            'zipcode'=> $zipcode
         ]);
     }
 
@@ -41,6 +56,8 @@ class CartController extends Controller {
 
         $this->redirect('/cart');
 
+        self::freight();
+
     }
 
     public function minus($args){
@@ -51,6 +68,8 @@ class CartController extends Controller {
         CartHandler::removeProductToCart($product, $cart->idcart);
 
         $this->redirect('/cart');
+
+        self::freight();
     }
 
     public function remove($args){
@@ -61,24 +80,46 @@ class CartController extends Controller {
         CartHandler::removeProductToCart($product, $cart->idcart, true);
 
         $this->redirect('/cart');
-    }
 
-    /*MIN - MAX
-    Comprimento (C): 15 cm – 100 cm
-    Largura (L): 10 cm – 100 cm
-    Altura (A): 1 cm – 100 cm
-    Soma das dimensões (C+L+A): 25 cm – 200 cm */
+        self::freight();
+    }
 
     public function freight(){
 
         $zipcode = filter_input(INPUT_POST, 'zipcode');
-
         $zipcode = str_replace('-', '', $zipcode);
+        $_SESSION['zipcode'] = $zipcode;
+
+        if(!empty($_SESSION['zipcode']) && !empty($zipcode)){
+            $zipcode = $_SESSION['zipcode'];
+        } 
 
         $cart = CartHandler::getFromSession();
         $products = CartHandler::getProducts();
-        
-        CartHandler::calcFreight($zipcode, $products['freight']);        
+
+        if(!empty($zipcode) && (count($products['carts']) > 0)){
+            $result = CartHandler::calcFreight($zipcode, $products['freight']);
+            
+            if(isset($result) && $result->Erro != 0){
+                $_SESSION['flash'] = (string)$result->MsgErro;   
+                $this->redirect('/cart');
+            }            
+
+            $_SESSION['vlfreight'] = (string)$result->Valor;
+            $_SESSION['deadline'] = (string)$result->PrazoEntrega;
+
+            $this->redirect('/cart');
+
+        } else {
+
+            if(count($products['carts']) == 0){
+                $_SESSION['flash'] = 'Não é possível calcular o frete de um carrinho vazio.';
+            }
+            if(empty($zipcode)){
+                $_SESSION['flash'] = 'CEP inexistente ou vazio.';
+            }
+            $this->redirect('/cart');
+        }    
 
     }
 

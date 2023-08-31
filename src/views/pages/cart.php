@@ -23,9 +23,11 @@
 
                         <form action="/checkout">
                             
-                            <div class="alert alert-danger" role="alert">
-                            Error!
-                            </div>
+                            <?php if(!empty($flash)): ?>
+                                <div class="alert alert-danger" role="alert">
+                                 <?=$flash;?>
+                                </div>
+                            <?php endif; ?>
 
                             <table cellspacing="0" class="shop_table cart">
                                 <thead>
@@ -84,7 +86,7 @@
                                     
                                     <div class="coupon">
                                         <label for="cep">CEP:</label>
-                                        <input type="text" placeholder="00000-000" value="" id="cep" class="input-text" name="zipcode">
+                                        <input type="text" placeholder="00000-000" id="cep" class="input-text" name="zipcode" value="">
                                         <input type="submit" formmethod="post" formaction="<?=$base;?>/cart/freight" value="CÁLCULAR" class="button">
                                     </div>
 
@@ -103,7 +105,7 @@
 
                                             <tr class="shipping">
                                                 <th>Frete</th>
-                                                <td>$5.00 <small>prazo de 0 dia(s)</small></td>
+                                                <td>R$<?=$vlfreight;?> <small>prazo de 0 dia(s)</small></td>
                                             </tr>
 
                                             <tr class="order-total">
