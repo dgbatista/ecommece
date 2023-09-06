@@ -20,11 +20,6 @@ class CartController extends Controller {
 
         $cart = CartHandler::getFromSession();
         $products = CartHandler::getProducts();
-        $vlfreight = (isset($_SESSION['vlfreight'])) ? $_SESSION['vlfreight'] : '';
-        $deadline = (isset($_SESSION['deadline'])) ? $_SESSION['deadline'] : '';
-
-        $_SESSION['deadline'] = '';
-        $_SESSION['vlfreight'] = '';
 
         if(isset($_SESSION['flash'])){ 
             $this->flash = $_SESSION['flash'];
@@ -32,14 +27,12 @@ class CartController extends Controller {
         }
 
         $this->render('cart', [
+            'cart' => $cart,
             'menuCurrent' => 'cart',
             'products' => $products['carts'],
             'qtd' => $products['qtd_product'],
             'total' => $products['total'],
-            'flash' => $this->flash,
-            'vlfreight' => $vlfreight,
-            'deadline' => $deadline,
-            'zipcode'=> $zipcode
+            'flash' => $this->flash
         ]);
     }
 
@@ -97,13 +90,30 @@ class CartController extends Controller {
         $cart = CartHandler::getFromSession();
         $products = CartHandler::getProducts();
 
+        if(empty($products['carts'])){
+            $cart->vlfreight = null;
+            $cart->nrdays = null;
+            CartHandler::update($cart);         
+        }
+
         if(!empty($zipcode) && (count($products['carts']) > 0)){
             $result = CartHandler::calcFreight($zipcode, $products['freight']);
+
+            // echo '<pre>';
+            // print_r($result);
+            // print_r($cart);
+            // exit;
             
             if(isset($result) && $result->Erro != 0){
                 $_SESSION['flash'] = (string)$result->MsgErro;   
                 $this->redirect('/cart');
-            }            
+            } else {
+                $cart->deszipcode = $zipcode;
+                $cart->vlfreight = number_format(self::formatToDecimal($result->Valor),2);
+                $cart->nrdays = (int)$result->PrazoEntrega;
+
+                CartHandler::update($cart);
+            }         
 
             $_SESSION['vlfreight'] = (string)$result->Valor;
             $_SESSION['deadline'] = (string)$result->PrazoEntrega;
@@ -121,6 +131,14 @@ class CartController extends Controller {
             $this->redirect('/cart');
         }    
 
+    }
+
+    public static function formatToDecimal($value){
+
+        $value = str_replace('.', '', $value);
+        $value = str_replace(',', '.', $value);
+
+        return $value;
     }
 
 

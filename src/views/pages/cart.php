@@ -105,7 +105,11 @@
 
                                             <tr class="shipping">
                                                 <th>Frete</th>
-                                                <td>R$<?=$vlfreight;?> <small>prazo de 0 dia(s)</small></td>
+                                                <td><?=($cart->vlfreight) ? 'R$ '.$cart->vlfreight : '';?> 
+                                                    
+                                                    <?=($cart->nrdays != '') ? '<small>prazo de '.$cart->nrdays.' dia(s)</small>' : '';?>
+                                                    
+                                                </td>
                                             </tr>
 
                                             <tr class="order-total">

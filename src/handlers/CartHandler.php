@@ -93,6 +93,17 @@ class CartHandler {
         ])->execute();
     }
 
+    public static function update(Cart $cart){
+        Cart::update([
+            'iduser'=>$cart->iduser ?? NULL,
+            'deszipcode'=>$cart->deszipcode ?? NULL,
+            'vlfreight'=>$cart->vlfreight ?? NULL,
+            'nrdays'=>$cart->nrdays ?? NULL
+            ])
+            ->where('idcart', $cart->idcart)
+        ->execute();
+    }
+
     public static function addProducToCart(Product $product, $idcart){
 
         CartsProduct::insert([
@@ -223,12 +234,13 @@ class CartHandler {
 
         $totals = $zipcodeInformation['qtd_products'];
 
-        if($zipcodeInformation['vlheight'] < 2) $zipcodeInformation['vlheight'] = 2;
+        if($zipcodeInformation['vlheight'] < 2) $zipcodeInformation['vlheight'] = 2; //altura
         if($zipcodeInformation['vlheight'] > 105) $zipcodeInformation['vlheight'] = 105;
-        if($zipcodeInformation['vlwidth'] < 11) $zipcodeInformation['vlwidth'] = 11;
+        if($zipcodeInformation['vlwidth'] < 11) $zipcodeInformation['vlwidth'] = 11; //largura
         if($zipcodeInformation['vlwidth'] > 105) $zipcodeInformation['vlwidth'] = 105;
-        if($zipcodeInformation['vllength'] > 105) $zipcodeInformation['vllength'] = 105;
+        if($zipcodeInformation['vllength'] > 105) $zipcodeInformation['vllength'] = 105; //comprimento
         if($zipcodeInformation['vllength'] < 16) $zipcodeInformation['vllength'] = 16;
+        if($zipcodeInformation['vlweight'] > 1) $zipcodeInformation['vlweight'] = 1;
 
         if($totals > 0){
 
@@ -239,19 +251,19 @@ class CartHandler {
                 'sCepOrigem'=>'11730000',
                 'sCepDestino'=>$zipcode,
                 'nVlPeso'=>$zipcodeInformation['vlweight'],
-                'nCdFormato'=>'1',
+                'nCdFormato'=>1,
                 'nVlComprimento'=>$zipcodeInformation['vllength'],
                 'nVlAltura'=>$zipcodeInformation['vlheight'],
                 'nVlLargura'=>$zipcodeInformation['vlwidth'],
-                'nVlDiametro'=>'0',
+                'nVlDiametro'=>0,
                 'sCdMaoPropria'=>'S',
                 'nVlValorDeclarado'=>$zipcodeInformation['vlprice'],
                 'sCdAvisoRecebimento'=>'S',
             ]);
 
-            $xml = (array)simplexml_load_file("http://ws.correios.com.br/calculador/CalcPrecoPrazo.asmx/CalcPrecoPrazo?".$qs);
+            $xml = simplexml_load_file("http://ws.correios.com.br/calculador/CalcPrecoPrazo.asmx/CalcPrecoPrazo?".$qs);
 
-            $result = $xml['Servicos']->cServico;
+            $result = $xml->Servicos->cServico;
 
             return $result;
 
