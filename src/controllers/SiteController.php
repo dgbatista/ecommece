@@ -5,6 +5,7 @@ use \core\Controller;
 use \src\handlers\UserHandler;
 use \src\handlers\ProductHandler;
 use \src\handlers\CategoryHandler;
+use \src\handlers\AddressHandler;
 
 class SiteController extends Controller {
 
@@ -70,5 +71,42 @@ class SiteController extends Controller {
 
     public function products(){
         echo 'produtos';
+    }
+
+    public function checkout(){
+
+        $user = UserHandler::checkLogin();
+
+        if(!$user){
+            $this->redirect('/login');
+        }
+
+        $address = AddressHandler::getAddressById($user->iduser);
+
+        $this->render('checkout', [
+            'address' => $address
+        ]);
+
+    }
+
+    public function login(){
+
+        $login = filter_input(INPUT_POST, 'login');
+        $password = filter_input(INPUT_POST, 'password');
+        $error = '';
+
+        try{
+            $user = UserHandler::verifyLogin($login, $password);
+        }catch(Exception $e){
+            $error = throw new \Exception("Usuário inexistente ou senha inválida");
+        }
+
+        if(!empty($user)){
+            $this->redirect('/checkout');
+        }
+
+        $this->render('login-site', [
+            'error' => $error
+        ]);
     }
 }

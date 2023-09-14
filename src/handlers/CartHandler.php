@@ -232,6 +232,9 @@ class CartHandler {
     Soma das dimensões < 200 cm */
     public static function calcFreight($zipcode, $zipcodeInformation = []){
 
+        // echo '<pre>';
+        // print_r($zipcodeInformation);
+
         $totals = $zipcodeInformation['qtd_products'];
 
         if($zipcodeInformation['vlheight'] < 2) $zipcodeInformation['vlheight'] = 2; //altura
@@ -241,6 +244,8 @@ class CartHandler {
         if($zipcodeInformation['vllength'] > 105) $zipcodeInformation['vllength'] = 105; //comprimento
         if($zipcodeInformation['vllength'] < 16) $zipcodeInformation['vllength'] = 16;
         if($zipcodeInformation['vlweight'] > 1) $zipcodeInformation['vlweight'] = 1;
+        if($zipcodeInformation['vlprice'] < 50) $zipcodeInformation['vlprice'] = 50;
+
 
         if($totals > 0){
 

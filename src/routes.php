@@ -16,6 +16,9 @@ $router->get('/cart/{idproduct}/minus', 'CartController@minus');
 $router->get('/cart/{idproduct}/remove', 'CartController@remove');
 $router->post('/cart/freight', 'CartController@freight');
 $router->get('/cart' , 'CartController@index');
+$router->get('/checkout', 'SiteController@checkout');
+$router->get('/login', 'SiteController@login');
+$router->post('/login', 'SiteController@login');
 
 
 /**ADMIN */
