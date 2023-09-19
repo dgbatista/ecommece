@@ -1,4 +1,4 @@
-<?=$render('site/header'); ?>
+<?=$render('site/header', ['loggedUser' => $loggedUser ?? false]); ?>
 
 <div class="product-big-title-area">
     <div class="container">

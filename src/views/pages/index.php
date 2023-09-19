@@ -1,4 +1,4 @@
-<?php $render('site/header', ['menuCurrent' => $menuCurrent]); ?>
+<?php $render('site/header', ['menuCurrent' => $menuCurrent, 'loggedUser' => $loggedUser ?? false]) ?>
 
 <div class="slider-area">
         	<!-- Slider -->

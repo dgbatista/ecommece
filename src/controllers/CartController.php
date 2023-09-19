@@ -6,14 +6,17 @@ use \src\models\Cart;
 use \src\models\Product;
 use \src\handlers\CartHandler;
 use \src\handlers\ProductHandler;
+use \src\handlers\UserHandler;
 
 class CartController extends Controller {
 
     public $cart;
     public $flash;
+    private $loggedUser;
 
     public function __construct(){
         $this->cart = CartHandler::getFromSession();
+        $this->loggedUser = UserHandler::checkLogin();   
     }
 
     public function index(){
@@ -32,7 +35,8 @@ class CartController extends Controller {
             'products' => $products['carts'],
             'qtd' => $products['qtd_product'],
             'total' => $products['total'],
-            'flash' => $this->flash
+            'flash' => $this->flash,
+            'loggedUser' => $this->loggedUser
         ]);
     }
 

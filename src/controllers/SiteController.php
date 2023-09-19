@@ -11,21 +11,19 @@ use \src\models\Addresse;
 
 class SiteController extends Controller {
 
-    // private $loggedUser;
+    private $loggedUser;
 
-    // public function __construct() {
-    //     $this->loggedUser = UserHandler::checkLogin();
-    //     if(UserHandler::checkLogin() === false){
-    //         $this->redirect('/login');
-    //     }        
-    // }
+    public function __construct() {
+        $this->loggedUser = UserHandler::checkLogin();      
+    }
 
     public function index() {
         $products = ProductHandler::getProducts();
 
         $this->render('index', [
             'products' => $products,
-            'menuCurrent' => 'home'
+            'menuCurrent' => 'home',
+            'loggedUser' => $this->loggedUser
         ]);
     }
 
@@ -93,7 +91,8 @@ class SiteController extends Controller {
 
         $this->render('checkout', [
             'address' => $address,
-            'error' => ''
+            'error' => '',
+            'loggedUser' => $user
         ]);
 
     }
