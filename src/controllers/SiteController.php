@@ -30,7 +30,7 @@ class SiteController extends Controller {
     public function logout(){
         if(!empty($_SESSION['token'])){
             $_SESSION['token'] = '';
-            $this->redirect('/admin/login');
+            $this->redirect('/');
         }
     }
 

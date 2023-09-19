@@ -11,6 +11,10 @@ class UserController extends Controller {
 
     public function __construct(){
         $this->loggedUser = UserHandler::checkLogin();
+
+        if($this->loggedUser && $this->loggedUser->inadmin === 0){
+            $this->redirect('/');
+        } 
     }
 
     /*Page*/

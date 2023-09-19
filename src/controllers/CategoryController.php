@@ -15,6 +15,9 @@ class CategoryController extends Controller {
         if(UserHandler::checkLogin() === false){
             $this->redirect('/admin/login');
         }        
+        if($this->loggedUser->inadmin === 0){
+            $this->redirect('/');
+        } 
     }
 
     public function index_admin() {

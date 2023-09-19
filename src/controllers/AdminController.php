@@ -12,11 +12,21 @@ class AdminController extends Controller {
         $this->loggedUser = UserHandler::checkLogin();
         if(UserHandler::checkLogin() === false){
             $this->redirect('/admin/login');
-        }        
+        }     
+        
+        if($this->loggedUser->inadmin === 0){
+            $this->redirect('/');
+        } 
+           
     }
 
     public function index() {
 
-        $this->render('admin/index');
+        if($this->loggedUser->inadmin === 0){
+            $this->redirect('/');
+        } else {
+            $this->render('admin/index');
+        }
+
     }    
 }
