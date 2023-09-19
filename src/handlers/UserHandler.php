@@ -41,6 +41,8 @@ class UserHandler {
                     ->where('deslogin', $login)
                 ->execute();
 
+                $_SESSION['token'] = $dataUser['token'];
+
                 return $dataUser;
             }
         }

@@ -17,15 +17,13 @@
     <div class="container">
         <div class="row">                
             <div class="col-md-6">
-                <?=$error;?>
-
                 <?php if($error!=''): ?>
                     <div class="alert alert-danger">
                         <?=($error != '')?$error : '';?>
                     </div>
                 <?php endif; ?>
 
-                <form action="/login" id="login-form-wrap" class="login" method="post">
+                <form action="<?=$base;?>/login" id="login-form-wrap" class="login" method="post">
                     <h2>Acessar</h2>
                     <p class="form-row form-row-first">
                         <label for="login">E-mail <span class="required">*</span>
@@ -56,6 +54,7 @@
                         <?=($error != '')?$error : '';?>
                     </div>
                 <?php endif; ?>
+                <?=$error = '';?>
 
                 <form id="register-form-wrap" action="/register" class="register" method="post">
                     <h2>Criar conta</h2>

@@ -6,6 +6,8 @@ use \src\handlers\UserHandler;
 use \src\handlers\ProductHandler;
 use \src\handlers\CategoryHandler;
 use \src\handlers\AddressHandler;
+use \src\models\User;
+use \src\models\Addresse;
 
 class SiteController extends Controller {
 
@@ -81,10 +83,17 @@ class SiteController extends Controller {
             $this->redirect('/login');
         }
 
-        $address = AddressHandler::getAddressById($user->iduser);
+        $person = UserHandler::getUserById($user->iduser);
+        
+        $address = AddressHandler::getAddressById($person->idperson);
+
+        if(!$address){
+            $address = new Addresse();
+        }
 
         $this->render('checkout', [
-            'address' => $address
+            'address' => $address,
+            'error' => ''
         ]);
 
     }
@@ -93,17 +102,27 @@ class SiteController extends Controller {
 
         $login = filter_input(INPUT_POST, 'login');
         $password = filter_input(INPUT_POST, 'password');
-        $error = '';
+        $error = '';        
 
-        try{
-            $user = UserHandler::verifyLogin($login, $password);
-        }catch(Exception $e){
-            $error = throw new \Exception("Usuário inexistente ou senha inválida");
-        }
+        if(isset($login)){
+            $login = filter_input(INPUT_POST, 'login');
+            $password = filter_input(INPUT_POST, 'password');            
+        
+            if(!empty($password)){
+                try{
+                    $user = UserHandler::verifyLogin($login, $password);
 
-        if(!empty($user)){
-            $this->redirect('/checkout');
-        }
+                    if(count($user) > 0){
+                        $this->redirect('/checkout');
+                    }
+        
+                }catch(Exception $e){
+                    $error = throw new \Exception("Usuário inexistente ou senha inválida");
+                }
+            }else{
+                echo 'não entrou';
+            } 
+        }        
 
         $this->render('login-site', [
             'error' => $error
