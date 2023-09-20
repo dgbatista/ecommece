@@ -20,10 +20,12 @@ class SiteController extends Controller {
     public function index() {
         $products = ProductHandler::getProducts();
 
+        $person = UserHandler::getUserById($this->loggedUser->iduser);
+
         $this->render('index', [
             'products' => $products,
             'menuCurrent' => 'home',
-            'loggedUser' => $this->loggedUser
+            'loggedUser' => $person
         ]);
     }
 
@@ -57,12 +59,14 @@ class SiteController extends Controller {
 
         $product = ProductHandler::getFromURL($desurl);
         $categories = ProductHandler::getCategories($product->idproduct);
+        $person = UserHandler::getUserById($this->loggedUser->iduser);
 
         if($product){
             $this->render('detalhes-produto',[
                 'product' => $product,
                 'categories' => $categories,
-                'menuCurrent' => 'products'
+                'menuCurrent' => 'products',
+                'loggedUser' => $person
             ]);
         } else {
             $this->redirect('index');
@@ -99,39 +103,41 @@ class SiteController extends Controller {
 
     public function login(){
         $flash = '';
+        $flashLogin = '';
 
         if(isset($_SESSION['flash'])){
             $flash = $_SESSION['flash'];
-            $_SESSION['flash'] = NULL;
+            unset($_SESSION['flash']);
+        }
+        if(isset($_SESSION['flashLogin'])){
+            $flashLogin = $_SESSION['flashLogin'];
+            unset($_SESSION['flashLogin']);
         }
 
         $login = filter_input(INPUT_POST, 'login');
         $password = filter_input(INPUT_POST, 'password');
-        $error = '';        
 
         if(isset($login)){
             $login = filter_input(INPUT_POST, 'login');
             $password = filter_input(INPUT_POST, 'password');            
         
             if(!empty($password)){
-                try{
-                    $user = UserHandler::verifyLogin($login, $password);
+                
+                $user = UserHandler::verifyLogin($login, $password);
 
-                    if(count($user) > 0){
-                        $this->redirect('/checkout');
-                    }
-        
-                }catch(Exception $e){
-                    $error = throw new \Exception("Usuário inexistente ou senha inválida");
+                if($user!= false && count($user) > 0){
+                    $this->redirect('/checkout');
+                } else {
+                    $_SESSION['flashLogin'] = "Usuário inexistente ou senha inválida";
+                    $flashLogin = $_SESSION['flashLogin'];
+                    unset($_SESSION['flashLogin']);
                 }
-            }else{
-                echo 'não entrou';
-            } 
+            }
         }        
 
-        $this->render('login-site', [
-            'error' => $error,
-            'flash' => $flash
+        $this->render('login-site',[
+            'flash' => $flash,
+            'flashLogin' => $flashLogin
         ]);
     }
 
@@ -154,9 +160,6 @@ class SiteController extends Controller {
             $flash = $_SESSION['flash'];
             $this->redirect('/login');
         }
-
-        print_r($user);
-        exit;
 
         $this->redirect('/checkout');
 

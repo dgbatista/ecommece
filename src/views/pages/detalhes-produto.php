@@ -1,4 +1,4 @@
-<?=$render('site/header', ['menuCurrent' => $menuCurrent]);?>
+<?=$render('site/header', ['menuCurrent' => $menuCurrent, 'loggedUser' => $loggedUser]);?>
 
 <?php //echo '<pre>'; print_r($product); echo '</pre>' ?>
     

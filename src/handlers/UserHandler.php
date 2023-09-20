@@ -25,13 +25,15 @@ class UserHandler {
 
         return false;
     }
-    public static function verifyLogin($login, $password){
+    public static function verifyLogin($login, $password){ 
 
         $user = User::select()->where('deslogin', $login)->one();
         $dataUser = [];
-
+    
         if($user){
+
             if(password_verify($password, $user['despassword'])){
+
                 $dataUser['admin'] = $user['inadmin'];
 
                 $dataUser['token'] = md5(time().rand(0,9999).time());
@@ -158,8 +160,6 @@ class UserHandler {
         return false;;
     }
 
-
-
     /**Auxiliar*/
     private static function transformArrayToUser($data = []){
 
@@ -237,7 +237,6 @@ class UserHandler {
             return false;
         }
 
-
         /*E-MAIL*/
         $email = UserHandler::validateEmail($data['desemail']);
         if($email != false){
@@ -257,19 +256,19 @@ class UserHandler {
         /*VALIDAR NUMERO DE TELEFONE*/
         $phone = $data['nrphone'];
 
-        $password = password_hash($data['despassword'], PASSWORD_DEFAULT);
-        
+        $password_hash = password_hash($data['despassword'], PASSWORD_BCRYPT);
+
         $newPerson = UserHandler::savePerson($data['desperson'], $email, $phone);
 
         if($newPerson){
 
-            $newUser = UserHandler::saveUser($newPerson['idperson'], $login, $password, $data['inadmin']);
+            $newUser = UserHandler::saveUser($newPerson['idperson'], $login, $password_hash, $data['inadmin']);
 
             $user = array_merge($newPerson, $newUser);
 
         }
 
-        self::verifyLogin($login, $password);
+        self::verifyLogin($login, $data['despassword']);
 
         return $user;
     }

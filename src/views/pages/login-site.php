@@ -17,9 +17,9 @@
     <div class="container">
         <div class="row">                
             <div class="col-md-6">
-                <?php if($error!=''): ?>
+                <?php if($flashLogin!=''): ?>
                     <div class="alert alert-danger">
-                        <?=($error != '')?$error : '';?>
+                        <?=$flashLogin;?>
                     </div>
                 <?php endif; ?>
 
@@ -54,7 +54,6 @@
                         <?=$flash;?>
                     </div>
                 <?php endif; ?>
-                <?=$error = '';?>
 
                 <form id="register-form-wrap" action="<?=$base;?>/register" class="register" method="post">
                     <h2>Criar conta</h2>
