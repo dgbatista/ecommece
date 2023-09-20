@@ -30,7 +30,7 @@ class SiteController extends Controller {
     public function logout(){
         if(!empty($_SESSION['token'])){
             $_SESSION['token'] = '';
-            $this->redirect('/');
+            $this->redirect('/login');
         }
     }
 
@@ -92,12 +92,18 @@ class SiteController extends Controller {
         $this->render('checkout', [
             'address' => $address,
             'error' => '',
-            'loggedUser' => $user
+            'loggedUser' => $person
         ]);
 
     }
 
     public function login(){
+        $flash = '';
+
+        if(isset($_SESSION['flash'])){
+            $flash = $_SESSION['flash'];
+            $_SESSION['flash'] = NULL;
+        }
 
         $login = filter_input(INPUT_POST, 'login');
         $password = filter_input(INPUT_POST, 'password');
@@ -124,7 +130,35 @@ class SiteController extends Controller {
         }        
 
         $this->render('login-site', [
-            'error' => $error
+            'error' => $error,
+            'flash' => $flash
         ]);
+    }
+
+    public function register(){
+
+        $name = filter_input(INPUT_POST, 'name');
+        $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+        $phone = filter_input(INPUT_POST, 'phone');
+        $password = filter_input(INPUT_POST, 'password');
+
+        $user = UserHandler::saveNewPersonUser([
+            'inadmin'=>0,
+            'desperson'=>$name,
+            'desemail'=>$email,
+            'nrphone'=>$phone,
+            'despassword'=>$password
+        ]);
+
+        if(!$user){
+            $flash = $_SESSION['flash'];
+            $this->redirect('/login');
+        }
+
+        print_r($user);
+        exit;
+
+        $this->redirect('/checkout');
+
     }
 }

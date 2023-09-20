@@ -214,5 +214,64 @@ class UserHandler {
             Person::delete()->where('idperson',$user[0]['idperson'])->execute();
         }
     }
- 
+
+    public static function saveNewPersonUser($data = []){
+
+        if(!isset($data['desperson']) || $data['desperson'] == ''){
+            $_SESSION['flash'] = 'Preencha o nome.';
+            return false;
+        }
+
+        if(!isset($data['desemail']) || $data['desemail'] == ''){
+            $_SESSION['flash'] = 'Preencha o Email.';
+            return false;
+        }
+
+        if(!isset($data['nrphone']) || $data['nrphone'] == ''){
+            $_SESSION['flash'] = 'Preencha o Telefone.';
+            return false;
+        }
+
+        if(!isset($data['despassword']) || $data['despassword'] == ''){
+            $_SESSION['flash'] = 'Preencha a senha.';
+            return false;
+        }
+
+
+        /*E-MAIL*/
+        $email = UserHandler::validateEmail($data['desemail']);
+        if($email != false){
+            $_SESSION['flash'] = 'E-mail já cadastrado.';
+            return false;
+        }
+        $email = $data['desemail'];
+
+        /**LOGIN */
+        $login = UserHandler::validateLogin($data['desemail']);
+        if($login != false){
+            $_SESSION['flash'] = 'Login não disponível.';
+            return false;
+        }
+        $login = $data['desemail'];
+
+        /*VALIDAR NUMERO DE TELEFONE*/
+        $phone = $data['nrphone'];
+
+        $password = password_hash($data['despassword'], PASSWORD_DEFAULT);
+        
+        $newPerson = UserHandler::savePerson($data['desperson'], $email, $phone);
+
+        if($newPerson){
+
+            $newUser = UserHandler::saveUser($newPerson['idperson'], $login, $password, $data['inadmin']);
+
+            $user = array_merge($newPerson, $newUser);
+
+        }
+
+        self::verifyLogin($login, $password);
+
+        return $user;
+    }
+
 }

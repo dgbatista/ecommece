@@ -37,12 +37,12 @@
                 <div class="col-md-8">
                     <div class="user-menu">
                         <ul>
-                            <li><a href="<?=$base;?>/login"><i class="fa fa-user"></i> Minha Conta</a></li>
+                            <li><a href="<?=$base;?>/profile"><i class="fa fa-user"></i> Minha Conta</a></li>
                             <li><a href="<?=$base;?>/login"><i class="fa fa-heart"></i> Lista de Desejos</a></li>
                             <li><a href="<?=$base;?>/cart"><i class="fa fa-shopping-cart"></i> Meu Carrinho</a></li>
                             <?php if($loggedUser): ?>
-                                <li><a href="#"><i class="fa fa-user"></i><?=$loggedUser->deslogin;?></a></li>
-                                <li><a href="<?=$base;?>/logout"><i class="fa fa-exit"></i> sair </a></li>
+                                <li><a href="<?=$base;?>/profile"><i class="fa fa-user"></i><?=$loggedUser->desperson;?></a></li>
+                                <li><a href="<?=$base;?>/logout"><i class="fa fa-close"></i> sair </a></li>
                             <?php else: ?>
                                 <li><a href="<?=$base;?>/login"><i class="fa fa-lock"></i> Login</a></li>
                             <?php endif; ?>

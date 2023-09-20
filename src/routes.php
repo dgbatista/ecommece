@@ -19,6 +19,7 @@ $router->get('/cart' , 'CartController@index');
 $router->get('/checkout', 'SiteController@checkout');
 $router->get('/login', 'SiteController@login');
 $router->post('/login', 'SiteController@login');
+$router->post('/register', 'SiteController@register');
 
 
 /**ADMIN */
