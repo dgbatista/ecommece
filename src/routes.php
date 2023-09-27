@@ -20,6 +20,12 @@ $router->get('/checkout', 'SiteController@checkout');
 $router->get('/login', 'SiteController@login');
 $router->post('/login', 'SiteController@login');
 $router->post('/register', 'SiteController@register');
+$router->get('/sent', 'SiteController@sent');
+$router->get('/forgot-reset-success', 'SiteController@forgot_reset_success');
+$router->get('/forgot-reset', 'SiteController@forgot_reset');
+$router->post('/forgot/reset', 'SiteController@forgot_reset');
+$router->get('/forgot', 'SiteController@forgot');
+$router->post('/forgot', 'SiteController@forgot');
 
 
 /**ADMIN */

@@ -169,4 +169,59 @@ class SiteController extends Controller {
         $this->redirect('/checkout');
 
     }
+
+    public function forgot(){
+
+        $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+
+        if(isset($email)){
+            $user = UserHandler::validateEmail($email);
+            $_SESSION['user'] = $user;
+
+            $this->redirect('/sent', ['user'=>$user]);
+ 
+        }
+        
+        $this->render('forgot', [
+            'loggedUser' => $this->loggedUser
+        ]);
+
+    }
+
+    public function sent(){
+
+        $this->render('forgot-sent', [
+            'loggedUser' => $this->loggedUser
+        ]);
+
+    }
+
+    public function forgot_reset(){
+
+        $user = (isset($_SESSION['user']) ? $_SESSION['user'][0] : ['desperson'=>'', 'desemail'=>'']);
+        
+        $password = filter_input(INPUT_POST, 'password');
+
+        if(isset($password) && isset($user)){
+
+            UserHandler::forgotReset($user['idperson'], $password);
+
+            $this->redirect('/forgot-reset-success');
+        }
+
+        $this->render('forgot-reset', [
+            'loggedUser' => $this->loggedUser,
+            'user'=> $user
+        ]);
+
+    }
+
+    public function forgot_reset_success(){
+
+        $this->render('forgot-reset-success', [
+            'loggedUser' => $this->loggedUser
+        ]);
+
+    }
+
 }

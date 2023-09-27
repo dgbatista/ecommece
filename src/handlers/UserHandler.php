@@ -275,4 +275,14 @@ class UserHandler {
         return $user;
     }
 
+
+    public static function forgotReset($idperson, $password){
+
+        $hash = password_hash($password, PASSWORD_DEFAULT);
+
+        User::update([
+            'despassword' => $hash])->where('idperson', $idperson)
+        ->execute();
+
+    }
 }

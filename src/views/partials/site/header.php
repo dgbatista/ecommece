@@ -1,3 +1,5 @@
+<?php (isset($loggedUser) ? $loggedUser : '')?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
   <head>
