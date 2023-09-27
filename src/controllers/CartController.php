@@ -23,7 +23,10 @@ class CartController extends Controller {
 
         $cart = CartHandler::getFromSession();
         $products = CartHandler::getProducts();
-        $person = UserHandler::getUserById($this->loggedUser->iduser);
+        $person = 0;
+        if($this->loggedUser != false){
+           $person = UserHandler::getUserById($this->loggedUser->iduser);
+        }
 
         if(isset($_SESSION['flash'])){ 
             $this->flash = $_SESSION['flash'];

@@ -11,7 +11,7 @@ use \src\models\Addresse;
 
 class SiteController extends Controller {
 
-    private $loggedUser;
+    private $loggedUser = 0;
 
     public function __construct() {
         $this->loggedUser = UserHandler::checkLogin();      
@@ -20,7 +20,10 @@ class SiteController extends Controller {
     public function index() {
         $products = ProductHandler::getProducts();
 
-        $person = UserHandler::getUserById($this->loggedUser->iduser);
+        $person = 0;
+        if($this->loggedUser != false){
+           $person = UserHandler::getUserById($this->loggedUser->iduser);
+        }
 
         $this->render('index', [
             'products' => $products,
@@ -104,6 +107,7 @@ class SiteController extends Controller {
     public function login(){
         $flash = '';
         $flashLogin = '';
+        $registerValues = '';
 
         if(isset($_SESSION['flash'])){
             $flash = $_SESSION['flash'];
@@ -137,7 +141,8 @@ class SiteController extends Controller {
 
         $this->render('login-site',[
             'flash' => $flash,
-            'flashLogin' => $flashLogin
+            'flashLogin' => $flashLogin,
+            'registerValues' =>(isset($_SESSION['registerValues']) ? $_SESSION['registerValues'] : ['desperson'=>'', 'desemail'=>'', 'nrphone'=>''])
         ]);
     }
 

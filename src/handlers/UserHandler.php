@@ -217,6 +217,8 @@ class UserHandler {
 
     public static function saveNewPersonUser($data = []){
 
+        $_SESSION['registerValues'] = $data;
+
         if(!isset($data['desperson']) || $data['desperson'] == ''){
             $_SESSION['flash'] = 'Preencha o nome.';
             return false;
