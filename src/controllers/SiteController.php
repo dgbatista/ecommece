@@ -88,16 +88,41 @@ class SiteController extends Controller {
             $this->redirect('/login');
         }
 
-        $person = UserHandler::getUserById($user->iduser);
-        
-        $address = AddressHandler::getAddressById($person->idperson);
+        $zipcode = filter_input(INPUT_GET, 'zipcode');
+        $desnumber = filter_input(INPUT_GET, 'desnumber');
+        $descomplement = filter_input(INPUT_GET, 'descomplement');
 
-        if(!$address){
-            $address = new Addresse();
-        }
+        $person = UserHandler::getUserById($user->iduser);  
+
+        
+        $userAddress = AddressHandler::getAddressById($person->idperson);        
+        
+        if(isset($zipcode)){
+            $address = AddressHandler::loadFromCep($zipcode);
+
+            $address->desnumber = $desnumber;
+            
+            if($userAddress->idperson != 0){
+                //update
+                AddressHandler::updateAddress($person->idperson, $address);
+
+                $userAddress = AddressHandler::getAddressById($person->idperson);
+                
+            } else{
+                //save
+                AddressHandler::saveAddress($person->idperson, $address);
+            }        
+
+            $userAddress = AddressHandler::getAddressById($person->idperson);
+        }        
+        
+        $userAddress->nrzipcode = AddressHandler::formatCepToView($userAddress->nrzipcode);
+
+        $userAddress->desnumber = $desnumber;
+        $userAddress->descomplement = $descomplement;
 
         $this->render('checkout', [
-            'address' => $address,
+            'address' => $userAddress,
             'error' => '',
             'loggedUser' => $person
         ]);
@@ -238,6 +263,11 @@ class SiteController extends Controller {
             $_SESSION['error'] = NULL;
         }
 
+        if(isset($_SESSION['profileMsg'])){
+            $profileMsg = $_SESSION['profileMsg'];
+            $_SESSION['profileMsg'] = NULL;
+        }
+
         $person = UserHandler::getUserById($this->loggedUser->iduser);
 
         $desperson = filter_input(INPUT_POST, 'desperson');
@@ -261,6 +291,8 @@ class SiteController extends Controller {
                 $person->nrphone = ($nrphone != '') ? $nrphone : null;
     
                 UserHandler::updateUserPerson($person);
+
+                $_SESSION['profileMsg'] = "Dados alterados com sucesso";
     
             } else {
                 $_SESSION['error'] = 'Campos obrigatórios não podem estar vazio.';

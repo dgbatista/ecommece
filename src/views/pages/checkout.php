@@ -17,7 +17,7 @@
 		<div class="row">
 			<div class="col-md-12">
 				<div class="product-content-right">
-					<form action="/checkout" class="checkout" method="post" name="checkout">
+					<form action="<?=$base;?>/checkout" class="checkout" method="post" name="checkout">
 						<div id="customer_details" class="col2-set">
 							<div class="row">
 								<div class="col-md-12">
@@ -34,12 +34,17 @@
 											<label class="" for="billing_address_1">Cep <abbr title="required" class="required">*</abbr>
 											</label>
                                             <input type="text" value="<?=$address->nrzipcode;?>" placeholder="00000-000" id="billing_address_1" name="zipcode" class="input-text ">
-                                            <input type="submit" value="Atualizar CEP" id="place_order" class="button alt" formaction="/checkout" formmethod="get">
+                                            <input type="submit" value="Atualizar CEP" id="place_order" class="button alt" formaction="<?=$base;?>/checkout" formmethod="get">
 										</p>
 										<p id="billing_address_1_field" class="form-row form-row-wide address-field validate-required">
 											<label class="" for="billing_address_1">Endereço <abbr title="required" class="required">*</abbr>
 											</label>
-											<input type="text" value="<?=$address->desaddress;?>" placeholder="Logradouro, número e bairro" id="billing_address_1" name="desaddress" class="input-text ">
+											<input type="text" value="<?=$address->desaddress;?>" placeholder="Logradouro" id="billing_address_1" name="desaddress" class="input-text ">
+										</p>
+										<p id="billing_address_1_field" class="form-row form-row-wide address-field validate-required">
+											<label class="" for="billing_address_1">Número <abbr title="required" class="required">*</abbr>
+											</label>
+											<input type="text" value="<?=$address->desnumber;?>" placeholder="Número" id="billing_address_1" name="desnumber" class="input-text ">
 										</p>
 										<p id="billing_address_2_field" class="form-row form-row-wide address-field">
 											<input type="text" value="<?=$address->descomplement;?>" placeholder="Complemento (opcional)" id="billing_address_2" name="descomplement" class="input-text ">
