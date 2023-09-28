@@ -107,7 +107,8 @@ class SiteController extends Controller {
     public function login(){
         $flash = '';
         $flashLogin = '';
-        $registerValues = '';
+        $registerValues = (isset($_SESSION['registerValues']) ? $_SESSION['registerValues'] : ['desperson'=>'', 'desemail'=>'', 'nrphone'=>'']);
+        $_SESSION['registerValues'] = NULL;
 
         if(isset($_SESSION['flash'])){
             $flash = $_SESSION['flash'];
@@ -142,7 +143,7 @@ class SiteController extends Controller {
         $this->render('login-site',[
             'flash' => $flash,
             'flashLogin' => $flashLogin,
-            'registerValues' =>(isset($_SESSION['registerValues']) ? $_SESSION['registerValues'] : ['desperson'=>'', 'desemail'=>'', 'nrphone'=>''])
+            'registerValues' => $registerValues
         ]);
     }
 
@@ -222,6 +223,57 @@ class SiteController extends Controller {
             'loggedUser' => $this->loggedUser
         ]);
 
+    }
+
+    public function profile(){
+        
+        if($this->loggedUser === false){
+            $this->redirect('/login');
+        }
+
+        $profileMsg = '';
+        $profileError = '';
+        if(isset($_SESSION['error'])){
+            $profileError = $_SESSION['error'];
+            $_SESSION['error'] = NULL;
+        }
+
+        $person = UserHandler::getUserById($this->loggedUser->iduser);
+
+        $desperson = filter_input(INPUT_POST, 'desperson');
+        $desemail = filter_input(INPUT_POST, 'desemail', FILTER_VALIDATE_EMAIL);
+        $nrphone = filter_input(INPUT_POST, 'nrphone');
+
+        if(isset($desperson) || isset($desemail)){
+            if(!empty($desperson) && !empty($desemail))  {
+                if($desemail != $person->desemail){
+                    $emailExists = UserHandler::validateEmail($desemail);
+    
+                    if($emailExists){
+                        $_SESSION['error'] = 'Email já cadastrado.';
+                        $this->redirect('/profile');
+                    } 
+    
+                    $person->desemail = $desemail;
+                }
+
+                $person->desperson = $desperson;
+                $person->nrphone = ($nrphone != '') ? $nrphone : null;
+    
+                UserHandler::updateUserPerson($person);
+    
+            } else {
+                $_SESSION['error'] = 'Campos obrigatórios não podem estar vazio.';
+                $profileError = $_SESSION['error'];
+                $_SESSION['error'] = NULL;
+            }
+        }        
+
+        $this->render('profile', [
+            'loggedUser' => $person,
+            'profileMsg' => $profileMsg,
+            'profileError' => $profileError
+        ]);
     }
 
 }

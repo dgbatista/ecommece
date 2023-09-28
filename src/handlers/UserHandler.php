@@ -195,7 +195,7 @@ class UserHandler {
             Person::update([
                     'desperson' => $user->desperson,
                     'desemail' => $user->desemail,
-                    'nrphone' => $user->nrphone
+                    'nrphone' => $user->nrphone ?? NULL
                 ])->where('idperson', $user->idperson)
             ->execute();
         }catch(Exception $e){

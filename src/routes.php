@@ -26,6 +26,10 @@ $router->get('/forgot-reset', 'SiteController@forgot_reset');
 $router->post('/forgot/reset', 'SiteController@forgot_reset');
 $router->get('/forgot', 'SiteController@forgot');
 $router->post('/forgot', 'SiteController@forgot');
+$router->get('/profile-menu', 'SiteController@profile_menu');
+$router->get('/profile', 'SiteController@profile');
+$router->post('/profile', 'SiteController@profile');
+
 
 
 /**ADMIN */
