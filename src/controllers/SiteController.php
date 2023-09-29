@@ -88,6 +88,12 @@ class SiteController extends Controller {
             $this->redirect('/login');
         }
 
+        $cepError = '';
+        if(isset($_SESSION['error'])){
+            $cepError = $_SESSION['error'];
+            $_SESSION['error'] = NULL;
+        }
+
         $zipcode = filter_input(INPUT_GET, 'zipcode');
         $desnumber = filter_input(INPUT_GET, 'desnumber');
         $descomplement = filter_input(INPUT_GET, 'descomplement');
@@ -95,10 +101,16 @@ class SiteController extends Controller {
         $person = UserHandler::getUserById($user->iduser);  
 
         
-        $userAddress = AddressHandler::getAddressById($person->idperson);        
+        $userAddress = AddressHandler::getAddressById($person->idperson);   
         
-        if(isset($zipcode)){
+        if(isset($zipcode) && !empty($zipcode)){
+
             $address = AddressHandler::loadFromCep($zipcode);
+
+            if(!$address){
+                $_SESSION['error'] = 'CEP não encontrado.';
+                $this->redirect('/checkout');
+            }
 
             $address->desnumber = $desnumber;
             
@@ -116,14 +128,17 @@ class SiteController extends Controller {
             $userAddress = AddressHandler::getAddressById($person->idperson);
         }        
         
+        if(isset($userAddress->nrzipcode) && $userAddress->nrzipcode != 0)
         $userAddress->nrzipcode = AddressHandler::formatCepToView($userAddress->nrzipcode);
+
+        if($userAddress->nrzipcode === 0) $userAddress->nrzipcode =  '';
 
         $userAddress->desnumber = $desnumber;
         $userAddress->descomplement = $descomplement;
 
         $this->render('checkout', [
             'address' => $userAddress,
-            'error' => '',
+            'error' => $cepError,
             'loggedUser' => $person
         ]);
 

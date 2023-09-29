@@ -44,9 +44,9 @@ class AddressHandler {
 
         $data = self::getCep($zipcode);
 
-        $address = new Addresse();
-
+        
         if(isset($data['logradouro']) && !empty($data['logradouro'])){
+            $address = new Addresse();
 
             $address->desaddress = $data['logradouro'];
             $address->desnumber = 0;
@@ -56,8 +56,10 @@ class AddressHandler {
             $address->desstate = $data['uf'];
             $address->descountry = 'Brasil';
             $address->nrzipcode = $zipcode;
+            return $address;
         }
-        return $address;
+        
+        return false;
     }
 
     public static function saveAddress($idperson, $address ){
@@ -108,10 +110,11 @@ class AddressHandler {
 
     public static function formatCepToView($cep){
 
-        if(strlen($cep) < 9 && $cep != ''){
+        if(strlen($cep) < 9 && $cep != '' && $cep != 0){
             $cep = substr_replace($cep, '0', 0, 0);
             $cep = substr_replace($cep, '-', 5, 0);
-        }
+        } 
+
         return $cep;
     }
 

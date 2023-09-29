@@ -17,14 +17,14 @@
 		<div class="row">
 			<div class="col-md-12">
 				<div class="product-content-right">
-					<form action="<?=$base;?>/checkout" class="checkout" method="post" name="checkout">
+					<form action="<?=$base;?>/checkout" class="checkout" method="post" name="checkout" id="zipcode">
 						<div id="customer_details" class="col2-set">
 							<div class="row">
 								<div class="col-md-12">
 
 									<?php if($error != ''): ?>
 										<div class="alert alert-danger">
-											Error!
+											<?=$error;?>
 										</div>
 									<?php endif; ?>
 
@@ -125,5 +125,12 @@
 		</div>
 	</div>
 </div>
+
+<script src="https://unpkg.com/imask"></script>
+<script>
+    IMask(document.querySelector('#billing_address_1'),{
+        mask: '00000-000'
+    });
+</script>
 
 <?=$render('site/footer')?>
