@@ -6,6 +6,7 @@ use \src\models\User;
 use \src\models\CartsProduct;
 use \src\models\Product;
 use ClanCats\Hydrahon\Query\Sql\Func;
+use \src\handlers\UserHandler;
 
 class CartHandler {
 
@@ -31,27 +32,31 @@ class CartHandler {
 
         $cart = new Cart();
 
-            $cart = self::getFromSessionID(session_id());
+        $cart = self::getFromSessionID(session_id());
 
-            if(!$cart){
+        $user = UserHandler::checkLogin();
 
-                $data['dessessionid'] = session_id();
+        if($user){
+            $cart->iduser = $user->iduser;                   
+        }
 
-                $user = UserHandler::checkLogin();
-                
-                if($user){
-                    $data['iduser'] = $user->iduser;                   
-                }
+        if(!$cart){
 
-                $cart = self::transformCartToObject($data);  
-                
-                self::save($cart);
-                
-                $c = self::getFromSessionID($data['dessessionid']);
-
+            $data['dessessionid'] = session_id();                
+            
+            if($user){
+                $data['iduser'] = $user->iduser;                   
             }
 
-            self::setToSession($cart);
+            $cart = self::transformCartToObject($data);  
+            
+            $idsession = self::save($cart);
+            
+            $cart = self::getFromSessionID($data['dessessionid']);
+
+        }
+
+        self::setToSession($cart);
 
         return $cart;
     }
@@ -139,48 +144,53 @@ class CartHandler {
 
         $cart = $_SESSION['cart'];
 
-        $data = CartsProduct::select()
-            ->join('products', 'cartsproducts.idproduct', '=', 'products.idproduct')
-            ->where('idcart', $cart->idcart)
-            ->whereNull('dtremoved')
-            ->groupBy('products.idproduct')
-        ->get();
+        if($cart){
+            $data = CartsProduct::select()
+                ->join('products', 'cartsproducts.idproduct', '=', 'products.idproduct')
+                ->where('idcart', $cart->idcart)
+                ->whereNull('dtremoved')
+                ->groupBy('products.idproduct')
+            ->get();
 
-        $freight = CartsProduct::select()
-            ->join('products as p', 'cartsproducts.idproduct', '=', 'p.idproduct')
-            ->where('idcart', $cart->idcart)
-            ->whereNull('dtremoved')
-            ->addField(new Func('sum', 'p.vlprice'), 'vlprice')
-            ->addField(new Func('sum', 'p.vlwidth'), 'vlwidth')
-            ->addField(new Func('sum', 'p.vlheight'), 'vlheight')
-            ->addField(new Func('sum', 'p.vllength'), 'vllength')
-            ->addField(new Func('sum', 'p.vlweight'), 'vlweight')
-            ->addField(new Func('count', 'p.idproduct'), 'qtd_products')
-        ->get();
+            $freight = CartsProduct::select()
+                ->join('products as p', 'cartsproducts.idproduct', '=', 'p.idproduct')
+                ->where('idcart', $cart->idcart)
+                ->whereNull('dtremoved')
+                ->addField(new Func('sum', 'p.vlprice'), 'total')
+                ->addField(new Func('sum', 'p.vlwidth'), 'vlwidth')
+                ->addField(new Func('sum', 'p.vlheight'), 'vlheight')
+                ->addField(new Func('sum', 'p.vllength'), 'vllength')
+                ->addField(new Func('sum', 'p.vlweight'), 'vlweight')
+                ->addField(new Func('count', 'p.idproduct'), 'qtd_products')
+            ->get();
 
-        $total = CartsProduct::select()
-            ->join('products', 'cartsproducts.idproduct', '=', 'products.idproduct')
-            ->where('idcart', $cart->idcart)
-            ->whereNull('dtremoved')
-            ->groupBy('products.idproduct')
-        ->count();  
+            $total = CartsProduct::select()
+                ->join('products', 'cartsproducts.idproduct', '=', 'products.idproduct')
+                ->where('idcart', $cart->idcart)
+                ->whereNull('dtremoved')
+                ->groupBy('products.idproduct')
+            ->count();  
 
-        $cart = self::arrayToCartObject($data);
+            $cart = self::arrayToCartObject($data);
 
-        if(!empty($cart)){
-            foreach($cart['carts'] as $item){
-                $qtd = self::getProductsById($item->idcart, $item->idproduct);
-                $item->total = $qtd * $item->vlprice;
-                $cart['qtd_product']["$item->idproduct"] = $qtd;
+            if(!empty($cart)){
+                foreach($cart['carts'] as $item){
+                    $qtd = self::getProductsById($item->idcart, $item->idproduct);
+                    $item->total = $qtd * $item->vlprice;
+                    $cart['qtd_product']["$item->idproduct"] = $qtd;
+                }
             }
+            $freight['vlfreight'] = 10;
+
+            $array['carts'] = $cart['carts'] ?? [];
+            $array['total'] = $total;
+            $array['qtd_product'] = $cart['qtd_product'] ?? [];
+            $array['freight'] = $freight[0] ?? [];
+
+            return $array;
         }
 
-        $array['carts'] = $cart['carts'] ?? [];
-        $array['total'] = $total;
-        $array['qtd_product'] = $cart['qtd_product'] ?? [];
-        $array['freight'] = $freight[0] ?? [];
-
-        return $array;
+        
     }
 
     public static function getProductsById($idcart, $idproduct){
@@ -276,6 +286,16 @@ class CartHandler {
 
         }
 
+    }
+
+    public static function getFullCart(){
+        $cart = CartHandler::getFromSession();
+        $productsCart = CartHandler::getProducts();
+
+        $cartMerge[] =$cart;
+        $cartMerge[] =$productsCart;
+
+        return $cartMerge;
     }
 
 }

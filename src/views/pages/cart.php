@@ -1,4 +1,8 @@
-<?php $render('site/header', ['menuCurrent' => $menuCurrent, 'loggedUser' => $loggedUser ?? false]); ?>
+<?php $render('site/header', [
+    'menuCurrent' => $menuCurrent,
+    'loggedUser' => $loggedUser ?? false,
+    'qtd_itens' => $cart[1]['total'],
+    'total_cart'=> $cart[1]['freight']['total']]); ?>
 
 <div class="product-big-title-area">
     <div class="container">
@@ -43,7 +47,7 @@
                                 <tbody>
                                     <?php //echo '<pre>'; print_r($products); ?>
                                     
-                                    <?php foreach($products as $product):?>                                        
+                                    <?php foreach($cart[1]['carts'] as $product):?>                                        
                                         <tr class="cart_item">
                                             <td class="product-remove">
                                                 <a title="Remove this item" class="remove" href="<?=$base;?>/cart/<?=$product->idproduct?>/remove">×</a> 
@@ -58,19 +62,19 @@
                                             </td>
 
                                             <td class="product-price">
-                                                <span class="amount">R$<?=$product->vlprice?></span> 
+                                                <span class="amount">R$ <?=$product->total?></span> 
                                             </td>
 
                                             <td class="product-quantity">
                                                 <div class="quantity buttons_added">
                                                     <input type="button" class="minus" value="-" onclick="window.location.href = '<?=$base;?>/cart/<?=$product->idproduct;?>/minus'">
-                                                    <input type="number" size="4" class="input-text qty text" title="Qty" value="<?=$qtd[$product->idproduct]?>" min="0" step="1" disabled/>
+                                                    <input type="number" size="4" class="input-text qty text" title="Qty" value="<?=$cart[1]['qtd_product'][$product->idproduct]?>" min="0" step="1" disabled/>
                                                     <input type="button" class="plus" value="+" onclick="window.location.href = '<?=$base;?>/cart/<?=$product->idproduct;?>/add'">
                                                 </div>
                                             </td>
 
                                             <td class="product-subtotal">
-                                                <span class="amount">R$<?=$product->total;?></span> 
+                                                <span class="amount">R$ <?=$product->total;?></span> 
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
@@ -100,21 +104,27 @@
                                         <tbody>
                                             <tr class="cart-subtotal">
                                                 <th>Subtotal</th>
-                                                <td><span class="amount">$700.00</span></td>
+                                                <td><span class="amount"><?=($cart[1]['freight']['total']) ? 'R$ '.$cart[1]['freight']['total'] : ''?></span></td>
                                             </tr>
 
                                             <tr class="shipping">
                                                 <th>Frete</th>
-                                                <td><?=($cart->vlfreight) ? 'R$ '.$cart->vlfreight : '';?> 
+                                                <td><?=($cart[0]->vlfreight) ? 'R$ '.$cart[0]->vlfreight : '';?> 
                                                     
-                                                    <?=($cart->nrdays != '') ? '<small>prazo de '.$cart->nrdays.' dia(s)</small>' : '';?>
+                                                    <?=($cart[0]->nrdays != '') ? '<small>prazo de '.$cart[0]->nrdays.' dia(s)</small>' : '';?>
                                                     
                                                 </td>
                                             </tr>
 
                                             <tr class="order-total">
                                                 <th>Total</th>
-                                                <td><strong><span class="amount">$705.00</span></strong> </td>
+                                                <td><strong>
+                                                        <?php if($cart[1]['freight']['total']): ?>
+                                                        <span class="amount">                                                        
+                                                            R$ <?=($cart[1]['freight']['total']+ $cart[0]->vlfreight)?>
+                                                        </span>
+                                                        <?php endif; ?>
+                                                </strong></td>
                                             </tr>
                                         </tbody>
                                     </table>

@@ -1,7 +1,10 @@
-<?=$render('site/header', ['menuCurrent' => $menuCurrent, 'loggedUser' => $loggedUser]);?>
+<?=$render('site/header', [
+    'menuCurrent' => $menuCurrent,
+     'loggedUser' => $loggedUser,
+     'qtd_itens' => $cart[1]['total'],
+     'total_cart'=> $cart[1]['freight']['total']
+     ]);?>
 
-<?php //echo '<pre>'; print_r($product); echo '</pre>' ?>
-    
     <div class="product-big-title-area">
         <div class="container">
             <div class="row">

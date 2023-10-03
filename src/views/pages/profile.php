@@ -1,4 +1,7 @@
-<?=$render('site/header', ['loggedUser'=>$loggedUser]);?>
+<?=$render('site/header', [
+    'loggedUser'=>$loggedUser,
+    'qtd_itens' => $cart[1]['total'],
+    'total_cart'=> $cart[1]['freight']['total']]);?>
 
 <div class="product-big-title-area">
     <div class="container">

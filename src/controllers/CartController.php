@@ -33,12 +33,16 @@ class CartController extends Controller {
             $_SESSION['flash'] = '';
         }
 
+        $cartMerge[] =$cart;
+        $cartMerge[] =$products;
+
+        // echo '<pre>';
+        // print_r($cartMerge);
+        // echo '</pre>';
+
         $this->render('cart', [
-            'cart' => $cart,
+            'cart' => $cartMerge,
             'menuCurrent' => 'cart',
-            'products' => $products['carts'],
-            'qtd' => $products['qtd_product'],
-            'total' => $products['total'],
             'flash' => $this->flash,
             'loggedUser' => $person
         ]);
@@ -106,11 +110,6 @@ class CartController extends Controller {
 
         if(!empty($zipcode) && (count($products['carts']) > 0)){
             $result = CartHandler::calcFreight($zipcode, $products['freight']);
-
-            // echo '<pre>';
-            // print_r($result);
-            // print_r($cart);
-            // exit;
             
             if(isset($result) && $result->Erro != 0){
                 $_SESSION['flash'] = (string)$result->MsgErro;   

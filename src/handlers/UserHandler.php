@@ -136,9 +136,13 @@ class UserHandler {
             ->orderBy('deslogin')
         ->one();
 
-        $user = self::transformArrayToUser($data);
+        if($data){
+            $user = self::transformArrayToUser($data);
 
-        return $user;
+            return $user;
+        }
+
+        return false;        
     }
 
     public static function getPersonById($idperson){

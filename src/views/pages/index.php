@@ -1,4 +1,9 @@
-<?php $render('site/header', ['menuCurrent' => $menuCurrent, 'loggedUser' => $loggedUser ?? false]) ?>
+<?php $render('site/header', [
+    'menuCurrent' => $menuCurrent, 
+    'loggedUser' => $loggedUser ?? false, 
+    'qtd_itens' => $cart[1]['total'],
+    'total_cart'=> $cart[1]['freight']['total']]);
+?>
 
 <div class="slider-area">
         	<!-- Slider -->

@@ -1,4 +1,9 @@
-<?=$render('site/header', ['loggedUser' => $loggedUser ?? false])?>
+<?=$render('site/header', [
+	'loggedUser' => $loggedUser ?? false,
+	'qtd_itens' => $cart[1]['total'],
+    'total_cart'=> $cart[1]['freight']['total']
+]);?>
+
 
 <div class="product-big-title-area">
 	<div class="container">
@@ -21,7 +26,7 @@
 						<div id="customer_details" class="col2-set">
 							<div class="row">
 								<div class="col-md-12">
-
+									
 									<?php if($error != ''): ?>
 										<div class="alert alert-danger">
 											<?=$error;?>
@@ -79,32 +84,34 @@
 												</thead>
 												<tbody>
                                                     
-													<tr class="cart_item">
-														<td class="product-name">
-															Ship Your Idea <strong class="product-quantity">× 1</strong> 
-														</td>
-														<td class="product-total">
-															<span class="amount">$700.00</span>
-														</td>
-                                                    </tr>
+													<?php foreach($cart[1]['carts'] as $item): ?>
+														<tr class="cart_item">
+															<td class="product-name">
+																<?=$item->desproduct;?> <strong class="product-quantity">× <?=$cart[1]['qtd_product'][$item->idproduct];?></strong> 
+															</td>
+															<td class="product-total">
+																<span class="amount"><?='R$ '.$item->total?></span>
+															</td>
+														</tr>
+													<?php endforeach; ?>
                                                     
 												</tbody>
 												<tfoot>
 													<tr class="cart-subtotal">
 														<th>Subtotal</th>
-														<td><span class="amount">$700.00</span>
+														<td><span class="amount"><?='R$ '.$cart[1]['freight']['total']?></span>
 														</td>
 													</tr>
 													<tr class="shipping">
 														<th>Frete</th>
 														<td>
-															$5.00
+															<?='R$'.' '. $cart[0]->vlfreight?>
 															<input type="hidden" class="shipping_method" value="free_shipping" id="shipping_method_0" data-index="0" name="shipping_method[0]">
 														</td>
 													</tr>
 													<tr class="order-total">
 														<th>Total do Pedido</th>
-														<td><strong><span class="amount">$705.00</span></strong> </td>
+														<td><strong><span class="amount"><?='R$ '.($cart[1]['freight']['total']+$cart[0]->vlfreight)?></span></strong> </td>
 													</tr>
 												</tfoot>
 											</table>

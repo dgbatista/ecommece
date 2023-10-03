@@ -8,19 +8,24 @@ class AddressHandler {
     public static function getAddressById($idperson){
 
         $data = Addresse::select()->where('idperson', $idperson)->one();
-        $address = new Addresse();
+
+        if($data){
+            $address = new Addresse();
         
-        $address->idperson = $data['idperson'] ?? 0;
-        $address->desaddress = $data['desaddress'] ?? '';
-        $address->desnumber = $data['desnumber'] ?? NULL;
-        $address->descomplement = $data['descomplement'] ?? '';
-        $address->desdistrict = $data['desdistrict'] ?? '';
-        $address->descity = $data['descity'] ?? '';
-        $address->desstate = $data['desstate'] ?? '';
-        $address->descountry = $data['descountry'] ?? '';
-        $address->nrzipcode = $data['nrzipcode'] ?? '';
-    
-        return $address;
+            $address->idperson = $data['idperson'] ?? 0;
+            $address->desaddress = $data['desaddress'] ?? '';
+            $address->desnumber = $data['desnumber'] ?? NULL;
+            $address->descomplement = $data['descomplement'] ?? '';
+            $address->desdistrict = $data['desdistrict'] ?? '';
+            $address->descity = $data['descity'] ?? '';
+            $address->desstate = $data['desstate'] ?? '';
+            $address->descountry = $data['descountry'] ?? '';
+            $address->nrzipcode = $data['nrzipcode'] ?? '';
+        
+            return $address;
+        }
+
+        return false;       
     }
 
     public static function getCep($nrcep){
@@ -43,22 +48,23 @@ class AddressHandler {
     public static function loadFromCep($zipcode){
 
         $data = self::getCep($zipcode);
-
+        $address = new Addresse();
         
         if(isset($data['logradouro']) && !empty($data['logradouro'])){
-            $address = new Addresse();
 
-            $address->desaddress = $data['logradouro'];
-            $address->desnumber = 0;
-            $address->descomplement = $data['complemento'];
-            $address->district = $data['bairro'];
-            $address->descity = $data['localidade'];
-            $address->desstate = $data['uf'];
-            $address->descountry = 'Brasil';
-            $address->nrzipcode = $zipcode;
+            $address->desaddress = $data['logradouro'] ?: '';
+            $address->desnumber = '';
+            $address->descomplement = $data['complemento']  ?: '';
+            $address->desdistrict = $data['bairro']  ?: '';
+            $address->descity = $data['localidade']  ?: '';
+            $address->desstate = $data['uf']  ?: '';
+            $address->descountry = 'Brasil'  ?: '';
+            $address->nrzipcode = $zipcode  ?: '';
+
+            $address->nrzipcode = self::formatCepToView($address->nrzipcode);
+
             return $address;
         }
-        
         return false;
     }
 
@@ -71,7 +77,7 @@ class AddressHandler {
             'desaddress' => $address->desaddress ?: '',
             'desnumber' => $address->desnumber ?: 0,
             'descomplement'=> $address->descomplement ?: NULL,
-            'desdistrict' =>$address->district ?: '',
+            'desdistrict' =>$address->desdistrict ?: '',
             'descity' => $address->descity ?: '',
             'desstate' => $address->desstate ?: '',
             'descountry' => $address->descountry ?: '',
@@ -90,7 +96,7 @@ class AddressHandler {
             'desaddress' => $address->desaddress ?: '',
             'desnumber' => $address->desnumber ?: 0,
             'descomplement'=> $address->descomplement ?: NULL,
-            'desdistrict' =>$address->district ?: '',
+            'desdistrict' =>$address->desdistrict ?: '',
             'descity' => $address->descity ?: '',
             'desstate' => $address->desstate ?: '',
             'descountry' => $address->descountry ?: '',
@@ -118,6 +124,22 @@ class AddressHandler {
         return $cep;
     }
 
+    public static function loadAddress($idperson){
+
+        $data = AddressHandler::getAddressById($idperson);
+
+        $address = new Addresse();
+        $address->desaddress = $data->desaddress ?: '';
+        $address->desnumber = $data->desnumber ?: '';
+        $address->descomplement = $data->descomplement ?: '';
+        $address->desdistrict = $data->desdistrict ?: '';
+        $address->descity = $data->descity ?: '';
+        $address->desstate = $data->desstate ?: '';
+        $address->descountry =  $data->descountry ?: '';
+        $address->nrzipcode = $data->nrzipcode ?: '';
+
+        return $address;
+    }
 }
 
     
