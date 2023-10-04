@@ -2,12 +2,12 @@
 namespace src\controllers;
 
 use \core\Controller;
-use \src\handlers\UserHandler;
-use \src\handlers\ProductHandler;
-use \src\handlers\CategoryHandler;
-use \src\handlers\CartHandler;
 use \src\handlers\AddressHandler;
-use \src\models\User;
+use \src\handlers\CartHandler;
+use \src\handlers\CategoryHandler;
+use \src\handlers\OrderHandler;
+use \src\handlers\ProductHandler;
+use \src\handlers\UserHandler;
 use \src\models\Addresse;
 
 class SiteController extends Controller
@@ -185,25 +185,60 @@ class SiteController extends Controller
         $address->descountry = $descountry;
 
         $user = UserHandler::getUserById($this->loggedUser->iduser);
+        $cart = CartHandler::getFullCart();
 
         $userAddress =  AddressHandler::getAddressById($user->idperson);
-
-        // echo '<pre>';
-        // print_r($userAddress);
-        // echo '</pre>';
-        // exit;
         
         if(!$userAddress){
-            echo 'salvou';
             AddressHandler::saveAddress($user->idperson, $address);
-            exit;
         } else {
-            echo 'atualizou';
             AddressHandler::updateAddress($user->idperson, $address);
-            exit;
+        }        
+        
+        $userAddress =  AddressHandler::getAddressById($user->idperson);
+        $address->idaddress = $userAddress->idaddress;
+
+        $order = OrderHandler::saveOrder($cart, $address);
+
+        if(!$order){
+            $_SESSION['error'] = 'Não foi possível continuar pois o carrinho está vazio !';
+            $this->redirect('/checkout');
         }
 
-        $this->redirect('/success');
+        $this->redirect('/order/'.$order->idorder);
+    }
+
+    public function order($args){
+
+        $idOrder = (int)$args['id'];
+
+        $order = OrderHandler::getJoinsOrderById($idOrder);
+
+        echo '<pre>';
+        print_r($order);
+        echo '</pre>';
+        exit;
+
+        $user = UserHandler::checkLogin();
+        if (!$user) { 
+            $this->redirect('/login'); 
+        }
+
+        $error = '';
+        if (isset($_SESSION['error'])) {
+            $error = $_SESSION['error'];
+            $_SESSION['error'] = NULL;
+        }
+
+        $cart = CartHandler::getFullCart();
+        $person = UserHandler::getUserById($this->loggedUser->iduser);
+
+        $this->render('payment', [
+            'cart' => $cart,
+            'loggedUser' => $person,
+            'error' => $error,
+            'order' => $order
+        ]);
 
     }
 
@@ -397,7 +432,12 @@ class SiteController extends Controller
             'profileError' => $profileError,
             'cart' => $cart
         ]);
+        
+        $this->redirect('/order');
+
     }
+
+    
 
 
 

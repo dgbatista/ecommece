@@ -30,6 +30,9 @@ $router->post('/forgot', 'SiteController@forgot');
 $router->get('/profile-menu', 'SiteController@profile_menu');
 $router->get('/profile', 'SiteController@profile');
 $router->post('/profile', 'SiteController@profile');
+$router->get('/order/{id}', 'SiteController@order');
+$router->get('/order', 'SiteController@order');
+
 
 
 /**ADMIN */

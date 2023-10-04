@@ -21,6 +21,7 @@ class AddressHandler {
             $address->desstate = $data['desstate'] ?? '';
             $address->descountry = $data['descountry'] ?? '';
             $address->nrzipcode = $data['nrzipcode'] ?? '';
+            $address->idaddress = $data['idaddress'] ??'';
         
             return $address;
         }
