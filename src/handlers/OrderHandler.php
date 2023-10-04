@@ -2,7 +2,7 @@
 namespace src\handlers;
 
 use \src\models\Order;
-use \src\models\User;
+use \src\models\OrdersStatu;
 
 
 class OrderHandler {
@@ -15,7 +15,7 @@ class OrderHandler {
                 Order::insert([
                     'idcart' => $cart[0]->idcart,
                     'iduser' => $cart[0]->iduser,
-                    'idstatus' => 1,
+                    'idstatus' => OrdersStatu::EM_ABERTO,
                     'idaddress' => $address->idaddress,
                     'vltotal' => $cart[1]['freight']['total'],
                 ])->execute();
@@ -79,7 +79,6 @@ class OrderHandler {
         }
 
         return false;
-
     }
 
 }

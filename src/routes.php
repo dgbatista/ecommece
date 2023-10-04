@@ -32,6 +32,7 @@ $router->get('/profile', 'SiteController@profile');
 $router->post('/profile', 'SiteController@profile');
 $router->get('/order/{id}', 'SiteController@order');
 $router->get('/order', 'SiteController@order');
+$router->get('/boleto/{idorder}', 'SiteController@boleto');
 
 
 

@@ -9,11 +9,11 @@
         <div class="row">
             <div class="col-md-12">
                 
-                <h1>Pagamento N°{$order.idorder}</h1>
+                <h1>Pagamento N° <?=$order->idorder;?></h1>
 
                 <button type="submit" id="btn-print" class="button alt" style="margin-bottom:10px">Imprimir</button>
 
-                <iframe src="/boleto/{$order.idorder}" name="boleto" frameborder="0" style="width:100%; min-height:1000px; border:1px solid #CCC; padding:20px;"></iframe>
+                <iframe src="<?=$base;?>/boleto/<?=$order->idorder;?>" name="boleto" frameborder="0" style="width:100%; min-height:1000px; border:1px solid #CCC; padding:20px;"></iframe>
 
                 <script>
                 document.querySelector("#btn-print").addEventListener("click", function(event){
