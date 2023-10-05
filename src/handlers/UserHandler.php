@@ -2,6 +2,7 @@
 namespace src\handlers;
 
 use \src\models\User;
+use \src\models\Order;
 use \src\models\Person;
 
 class UserHandler {
@@ -287,6 +288,25 @@ class UserHandler {
         User::update([
             'despassword' => $hash])->where('idperson', $idperson)
         ->execute();
+
+    }
+
+    public static function getOrders($idUser){
+
+        $data = Order::select()
+                ->join('ordersstatus','orders.idstatus', '=', 'ordersstatus.idstatus')
+                ->join('carts', 'orders.idcart', '=', 'carts.idcart')
+                ->join('users', 'orders.iduser', '=', 'users.iduser')
+                ->join('addresses', 'orders.idaddress', '=', 'addresses.idaddress')
+                ->join('persons', 'users.idperson', '=', 'persons.idperson')
+            ->where('users.iduser', $idUser )
+        ->get();
+
+    if($data){
+        return $data;
+    }
+
+    return false;
 
     }
 }

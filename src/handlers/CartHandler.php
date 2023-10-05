@@ -288,12 +288,20 @@ class CartHandler {
 
     }
 
-    public static function getFullCart(){
-        $cart = CartHandler::getFromSession();
-        $productsCart = CartHandler::getProducts();
+    public static function getFullCart($idcart = false){
+        if(!$idcart){
+            $cart = CartHandler::getFromSession();
+            $productsCart = CartHandler::getProducts();
 
-        $cartMerge[] =$cart;
-        $cartMerge[] =$productsCart;
+            $cartMerge[] =$cart;
+            $cartMerge[] =$productsCart;
+        } else {
+            $cart = CartHandler::getFromSession();
+            $productsCart = CartHandler::getProducts();
+
+            $cartMerge[] =$cart;
+            $cartMerge[] =$productsCart;
+        }
 
         return $cartMerge;
     }

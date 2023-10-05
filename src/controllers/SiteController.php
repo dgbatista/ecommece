@@ -513,6 +513,72 @@ class SiteController extends Controller
 
     }
 
+    public function profile_orders(){
+
+        $user = UserHandler::checkLogin();
+        if (!$user) { 
+            $this->redirect('/login'); 
+        }
+
+        $cart = CartHandler::getFullCart();
+        $person = UserHandler::getUserById($this->loggedUser->iduser);
+
+        $orders = UserHandler::getOrders($user->iduser);
+        // $orders = (object) $orders;
+
+        foreach($orders as $order){
+            $order['vltotal'] = ProductHandler::formatPrice($order['vltotal']);
+            $orderArray []= (object)$order;
+        }
+
+        $orders = $orderArray;
+
+        $this->render('profile-orders',[
+            'loggedUser' => $person,
+            'cart' => $cart,
+            'orders' => $orders
+        ]);
+    }
+
+    public function profile_orders_details($args){
+
+        $user = UserHandler::checkLogin();
+        if (!$user) { 
+            $this->redirect('/login'); 
+        }
+
+        if (isset($_SESSION['error'])) {
+            $error = $_SESSION['error'];
+            $_SESSION['error'] = NULL;
+        }
+
+        $idorder = (int)$args['idorder'];
+
+        $order = (object)OrderHandler::getJoinsOrderById($idorder)[0];
+        if(!$order){
+            $this->redirect('/profile/orders');
+        }
+
+        $cart = CartHandler::getFullCart();
+        // $cart = OrderHandler::getOrderByIdCart($idorder);
+        $person = UserHandler::getUserById($this->loggedUser->iduser);
+        $cartProducts = OrderHandler::getJoinsOrderByIdCart($order->idorder);
+
+        foreach($cartProducts as $product){
+            $product['vltotal'] = ProductHandler::formatPrice($product['vltotal']);
+            $productArray []= (object)$product;
+        }
+
+
+        $this->render('profile-orders-detail', [
+            'error' => (isset($error) && !empty($error) != '') ? $error : '',
+            'loggedUser' => $person,
+            'cart' => $cart,
+            'order' => $order,
+            'cartProducts' => $productArray
+        ]);
+    }
+
     
 
     

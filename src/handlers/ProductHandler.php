@@ -172,11 +172,9 @@ class ProductHandler {
     }
 
     public static function formatPrice($value){
-
         $value = str_replace(',', '', $value);
         $value = str_replace ('.', ',', $value);
 
         return $value;
-
     }
 }

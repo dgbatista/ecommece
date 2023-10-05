@@ -81,4 +81,24 @@ class OrderHandler {
         return false;
     }
 
+    public static function getJoinsOrderByIdCart($idOrder){
+
+        $data = Order::select()
+            ->join('ordersstatus','orders.idstatus', '=', 'ordersstatus.idstatus')
+            ->join('carts', 'orders.idcart', '=', 'carts.idcart')
+            ->join('users', 'orders.iduser', '=', 'users.iduser')
+            ->join('addresses', 'orders.idaddress', '=', 'addresses.idaddress')
+            ->join('persons', 'users.idperson', '=', 'persons.idperson')
+            ->join('cartsproducts', 'carts.idcart', '=', 'cartsproducts.idcart')
+            ->join('products', 'cartsproducts.idproduct', '=', 'products.idproduct')
+            ->where('idorder', $idOrder)
+        ->get();
+
+        if($data){
+            return $data;
+        }
+
+        return false;
+    }
+
 }

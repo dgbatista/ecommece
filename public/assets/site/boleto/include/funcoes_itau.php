@@ -7,9 +7,9 @@ $fator_vencimento = fator_vencimento($dadosboleto["data_vencimento"]);
 
 //valor tem 10 digitos, sem virgula
 $valor = formata_numero($dadosboleto["valor_boleto"],10,0,"valor");
-//agencia é 4 digitos
+//agencia ï¿½ 4 digitos
 $agencia = formata_numero($dadosboleto["agencia"],4,0);
-//conta é 5 digitos + 1 do dv
+//conta ï¿½ 5 digitos + 1 do dv
 $conta = formata_numero($dadosboleto["conta"],5,0);
 $conta_dv = formata_numero($dadosboleto["conta_dv"],1,0);
 //carteira 175
@@ -33,7 +33,7 @@ $dadosboleto["nosso_numero"] = $nossonumero;
 $dadosboleto["codigo_banco_com_dv"] = $codigo_banco_com_dv;
 
 
-// FUNÇÕES
+// FUNï¿½ï¿½ES
 // Algumas foram retiradas do Projeto PhpBoleto e modificadas para atender as particularidades de cada banco
 
 function digitoVerificador_barra($numero) {
@@ -106,10 +106,10 @@ $altura = 50 ;
 
 
 //Guarda inicial
-?><img src=imagens/p.png width=<?php echo $fino?> height=<?php echo $altura?> border=0><img 
-src=imagens/b.png width=<?php echo $fino?> height=<?php echo $altura?> border=0><img 
-src=imagens/p.png width=<?php echo $fino?> height=<?php echo $altura?> border=0><img 
-src=imagens/b.png width=<?php echo $fino?> height=<?php echo $altura?> border=0><img 
+?><img src=/ecommerce/public/assets/site/boleto/imagens/p.png width=<?php echo $fino?> height=<?php echo $altura?> border=0><img 
+src=/ecommerce/public/assets/site/imagens/boleto/b.png width=<?php echo $fino?> height=<?php echo $altura?> border=0><img 
+src=/ecommerce/public/assets/site/imagens/boleto/p.png width=<?php echo $fino?> height=<?php echo $altura?> border=0><img 
+src=/ecommerce/public/assets/site/imagens/boleto/b.png width=<?php echo $fino?> height=<?php echo $altura?> border=0><img 
 <?php
 $texto = $valor ;
 if((strlen($texto) % 2) <> 0){
@@ -128,7 +128,7 @@ while (strlen($texto) > 0) {
       $f1 = $largo ;
     }
 ?>
-    src=imagens/p.png width=<?php echo $f1?> height=<?php echo $altura?> border=0><img 
+    src=/ecommerce/public/assets/site/boleto/imagens/p.png width=<?php echo $f1?> height=<?php echo $altura?> border=0><img 
 <?php
     if (substr($f,$i,1) == "0") {
       $f2 = $fino ;
@@ -136,18 +136,18 @@ while (strlen($texto) > 0) {
       $f2 = $largo ;
     }
 ?>
-    src=imagens/b.png width=<?php echo $f2?> height=<?php echo $altura?> border=0><img 
+    src=/ecommerce/public/assets/site/boleto/imagens/b.png width=<?php echo $f2?> height=<?php echo $altura?> border=0><img 
 <?php
   }
 }
 
 // Draw guarda final
 ?>
-src=imagens/p.png width=<?php echo $largo?> height=<?php echo $altura?> border=0><img 
-src=imagens/b.png width=<?php echo $fino?> height=<?php echo $altura?> border=0><img 
-src=imagens/p.png width=<?php echo 1?> height=<?php echo $altura?> border=0> 
+src=/ecommerce/public/assets/site/boleto/imagens/p.png width=<?php echo $largo?> height=<?php echo $altura?> border=0><img 
+src=/ecommerce/public/assets/site/boleto/imagens/b.png width=<?php echo $fino?> height=<?php echo $altura?> border=0><img 
+src=/ecommerce/public/assets/site/boleto/imagens/p.png width=<?php echo 1?> height=<?php echo $altura?> border=0> 
   <?php
-} //Fim da função
+} //Fim da funï¿½ï¿½o
 
 function esquerda($entra,$comp){
 	return substr($entra,0,$comp);
@@ -194,7 +194,7 @@ function modulo_10($num) {
             // pega cada numero isoladamente
             $numeros[$i] = substr($num,$i-1,1);
             // Efetua multiplicacao do numero pelo (falor 10)
-            // 2002-07-07 01:33:34 Macete para adequar ao Mod10 do Itaú
+            // 2002-07-07 01:33:34 Macete para adequar ao Mod10 do Itaï¿½
             $temp = $numeros[$i] * $fator; 
             $temp0=0;
             foreach (preg_split('//',$temp,-1,PREG_SPLIT_NO_EMPTY) as $k=>$v){ $temp0+=$v; }
@@ -208,7 +208,7 @@ function modulo_10($num) {
             }
         }
 		
-        // várias linhas removidas, vide função original
+        // vï¿½rias linhas removidas, vide funï¿½ï¿½o original
         // Calculo do modulo 10
         $resto = $numtotal10 % 10;
         $digito = 10 - $resto;
@@ -225,22 +225,22 @@ function modulo_11($num, $base=9, $r=0)  {
      *   Autor:
      *           Pablo Costa <pablo@users.sourceforge.net>
      *
-     *   Função:
+     *   Funï¿½ï¿½o:
      *    Calculo do Modulo 11 para geracao do digito verificador 
      *    de boletos bancarios conforme documentos obtidos 
      *    da Febraban - www.febraban.org.br 
      *
      *   Entrada:
-     *     $num: string numérica para a qual se deseja calcularo digito verificador;
+     *     $num: string numï¿½rica para a qual se deseja calcularo digito verificador;
      *     $base: valor maximo de multiplicacao [2-$base]
      *     $r: quando especificado um devolve somente o resto
      *
-     *   Saída:
+     *   Saï¿½da:
      *     Retorna o Digito verificador.
      *
-     *   Observações:
-     *     - Script desenvolvido sem nenhum reaproveitamento de código pré existente.
-     *     - Assume-se que a verificação do formato das variáveis de entrada é feita antes da execução deste script.
+     *   Observaï¿½ï¿½es:
+     *     - Script desenvolvido sem nenhum reaproveitamento de cï¿½digo prï¿½ existente.
+     *     - Assume-se que a verificaï¿½ï¿½o do formato das variï¿½veis de entrada ï¿½ feita antes da execuï¿½ï¿½o deste script.
      */                                        
 
     $soma = 0;
@@ -275,7 +275,7 @@ function modulo_11($num, $base=9, $r=0)  {
     }
 }
 
-// Alterada por Glauber Portella para especificação do Itaú
+// Alterada por Glauber Portella para especificaï¿½ï¿½o do Itaï¿½
 function monta_linha_digitavel($codigo) {
 		// campo 1
         $banco    = substr($codigo,0,3);

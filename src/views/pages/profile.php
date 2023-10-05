@@ -20,7 +20,7 @@
     <div class="container">
         <div class="row">                
             <div class="col-md-3">
-                <?php $this->render('profile-menu');?>
+                <?=$this->render('profile-menu');?>
             </div>
             <div class="col-md-9">
                 <?php if ($profileMsg != ''): ?>
