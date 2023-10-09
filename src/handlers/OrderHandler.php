@@ -94,6 +94,12 @@ class OrderHandler {
             ->where('idorder', $idOrder)
         ->get();
 
+        if(count($data) > 0){
+            foreach($data as $key => $item){
+                $data[$key]['qtd_products'] = CartHandler::getProductsById($item['idcart'], $item['idproduct']);
+            }
+        }
+
         if($data){
             return $data;
         }

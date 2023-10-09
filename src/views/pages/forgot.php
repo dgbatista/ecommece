@@ -1,4 +1,8 @@
-<?=$render('site/header', ['loggedUser'=>$loggedUser]);?>
+<?=$render('site/header', [
+	'loggedUser' => $loggedUser ?? false,
+	'qtd_itens' => 0,
+    'total_cart'=> false
+]);?>
 
 <div class="product-big-title-area">
     <div class="container">

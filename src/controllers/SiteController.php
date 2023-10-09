@@ -9,6 +9,8 @@ use \src\handlers\OrderHandler;
 use \src\handlers\ProductHandler;
 use \src\handlers\UserHandler;
 use \src\models\Addresse;
+use \src\models\Cart;
+
 
 class SiteController extends Controller
 {
@@ -205,6 +207,9 @@ class SiteController extends Controller
             $this->redirect('/checkout');
         }
 
+        //zerar carrinho após finalizado a order
+        
+
         $this->redirect('/order/'.$order->idorder);
     }
 
@@ -229,9 +234,11 @@ class SiteController extends Controller
 
         $order = (object)$order[0];
 
+        $cart[0]->order = $order->idorder;
         echo '<pre>';
-        print_r($order);
+        print_r($cart);
         echo '</pre>';
+
 
         $this->render('payment', [
             'cart' => $cart,
@@ -560,7 +567,7 @@ class SiteController extends Controller
         }
 
         $cart = CartHandler::getFullCart();
-        // $cart = OrderHandler::getOrderByIdCart($idorder);
+
         $person = UserHandler::getUserById($this->loggedUser->iduser);
         $cartProducts = OrderHandler::getJoinsOrderByIdCart($order->idorder);
 
@@ -579,8 +586,71 @@ class SiteController extends Controller
         ]);
     }
 
-    
+    public function password_reset(){
 
+        $user = UserHandler::checkLogin();
+        if (!$user) { 
+            $this->redirect('/login'); 
+        }
+
+        $error = '';
+        if (isset($_SESSION['error'])) {
+            $error = $_SESSION['error'];
+            $_SESSION['error'] = NULL;
+        }
+        
+        $success = '';
+        if (isset($_SESSION['success'])) {
+            $success = $_SESSION['success'];
+            $_SESSION['success'] = NULL;
+        }
+
+        $cart = CartHandler::getFullCart();
+        $person = UserHandler::getUserById($user->iduser);
+
+        /*POST*/
+        $current_pass = filter_input(INPUT_POST, 'current_pass');
+        $new_pass = filter_input(INPUT_POST, 'new_pass');
+        $new_pass_confirm = filter_input(INPUT_POST, 'new_pass_confirm');
+
+        if(isset($current_pass) && !empty($current_pass)){
+            
+            $u = UserHandler::verifyLogin($user->deslogin, $current_pass);
+
+            if(!$u){
+                $error = 'Senha atual inválida';
+            }else if(!isset($new_pass) || empty($new_pass)){ 
+                $error = 'Preencha a nova senha';
+            } else if(!isset($new_pass_confirm) || empty($new_pass_confirm)){ 
+                $error = 'Preencha a confirmação da nova senha';
+            } else if($new_pass != $new_pass_confirm){
+                $error = 'As novas senhas não conferem';
+            } else if($new_pass === $new_pass_confirm){
+                
+                $result = UserHandler::updatePass($user->iduser, $new_pass);
+
+                if(!$result){
+                    $error = 'Erro ao atualizar';
+                } else {
+                    $success = 'Password atualizado!';
+                    $_SESSION['token'] = NULL;
+                }
+
+            } else {
+                $error = 'As novas senhas não conferem';
+            }           
+            // UserHanlder::update('despassword',)
+        } else if(isset($current_pass) && empty($current_pass)) {
+            $error = 'Preencha a senha atual';
+        }
+
+        $this->render('profile-change-password', [
+            'loggedUser' => $person,
+            'cart' => $cart,
+            'error' => (isset($error) || $error != '') ? $error  : '',
+            'success' => (isset($success) || $success != '') ? $success  : ''
+        ]);
+    }
     
 
 

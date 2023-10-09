@@ -36,10 +36,6 @@ class CartController extends Controller {
         $cartMerge[] =$cart;
         $cartMerge[] =$products;
 
-        // echo '<pre>';
-        // print_r($cartMerge);
-        // echo '</pre>';
-
         $this->render('cart', [
             'cart' => $cartMerge,
             'menuCurrent' => 'cart',

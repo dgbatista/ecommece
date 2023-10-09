@@ -4,12 +4,6 @@
     'total_cart'=> $cart[1]['freight']['total']
 ]);?>
 
-<?php echo '<pre>'; print_r($order); echo '</pre>';?>
-<?php echo '<pre>'; print_r($cartProducts); echo '</pre>';?>
-<?php echo '<pre>'; print_r($cart); echo '</pre>';?>
-
-
-
 <style>
 @media print {
     .header-area,
@@ -62,10 +56,10 @@
                         <?php foreach($cartProducts as $product):?> 
                             <tr class="cart_item">
                                 <td class="product-name">
-                                    <?=$product->desproduct?> <strong class="product-quantity">× {$value.nrqtd}</strong> 
+                                    <?=$product->desproduct?> <strong class="product-quantity">× <?=$product->qtd_products?></strong> 
                                 </td>
                                 <td class="product-total">
-                                    <span class="amount">R${$value.vltotal}</span>
+                                    <span class="amount">R$<?=$product->vlprice;?></span>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -73,23 +67,23 @@
                         <tfoot>
                             <tr class="cart-subtotal">
                                 <th>Subtotal</th>
-                                <td><span class="amount"><?=($cart[1]['freight']['total']) ? 'R$ '.$cart[1]['freight']['total'] : ''?></span>
+                                <td><span class="amount"><?=($order->vltotal) ? 'R$ '.$order->vltotal : ''?></span>
                                 </td>
                             </tr>
                             <tr class="shipping">
                                 <th>Frete</th>
                                 <td>
-                                    <?=($cart[0]->vlfreight) ? 'R$ '.$cart[0]->vlfreight : '';?> 
-                                    <?=($cart[0]->nrdays != '') ? '<small>prazo de '.$cart[0]->nrdays.' dia(s)</small>' : '';?>
+                                    <?=($order->vlfreight) ? 'R$ '.$order->vlfreight : ''?> 
+                                    <?=($order->nrdays) ? '<small>prazo de '.$order->nrdays.' dia(s)</small>' : '';?>
                                     <input type="hidden" class="shipping_method" value="free_shipping" id="shipping_method_0" data-index="0" name="shipping_method[0]">
                                 </td>
                             </tr>
                             <tr class="order-total">
                                 <th>Total do Pedido</th>
                                 <td><strong><span class="amount">
-                                    <?php if($cart[1]['freight']['total']): ?>
+                                    <?php if($order->vltotal): ?>
                                         <span class="amount">                                                        
-                                            R$ <?=($cart[1]['freight']['total']+ $cart[0]->vlfreight)?>
+                                            R$ <?=($order->vltotal + $order->vlfreight)?>
                                         </span>
                                     <?php endif; ?>
                                 </span></strong> </td>

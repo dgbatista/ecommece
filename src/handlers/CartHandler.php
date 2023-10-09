@@ -189,8 +189,6 @@ class CartHandler {
 
             return $array;
         }
-
-        
     }
 
     public static function getProductsById($idcart, $idproduct){
@@ -304,6 +302,10 @@ class CartHandler {
         }
 
         return $cartMerge;
+    }
+
+    public static function createNewCart(){
+        
     }
 
 }

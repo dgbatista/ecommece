@@ -1,5 +1,5 @@
 <?=$render('site/header', [
-    'loggedUser' => $loggedUser ?? false,
+    'loggedUser' => $loggedUser ?: false,
 	'qtd_itens' => $cart[1]['total'],
     'total_cart'=> $cart[1]['freight']['total']]); ?>
 
@@ -30,3 +30,5 @@
         </div>
     </div>
 </div>
+
+<?php print_r($cart);?>

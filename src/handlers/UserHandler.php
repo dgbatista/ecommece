@@ -309,4 +309,22 @@ class UserHandler {
     return false;
 
     }
+
+    public static function updatePass($iduser = '', $newPassword =  ''){
+
+        if(!empty($iduser) && !empty($newPassword)){
+        
+            $hash = password_hash($newPassword, PASSWORD_DEFAULT);
+
+            User::update([
+                'despassword' => $hash
+                ])
+                ->where('iduser', $iduser)
+            ->execute();
+
+            return true;
+        }
+
+        return false;
+    }
 }
