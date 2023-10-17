@@ -140,6 +140,14 @@ class CartHandler {
         }
     }
 
+    public static function removeAllProductsToCart($idcart){
+        CartsProduct::update([
+            'dtremoved'=> date('Y-m-d H:i:s')
+        ])
+            ->where('idcart', $idcart)
+        ->execute();        
+    }
+
     public static function getProducts(){
 
         $cart = $_SESSION['cart'];

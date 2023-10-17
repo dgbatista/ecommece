@@ -10,6 +10,7 @@ use \src\handlers\ProductHandler;
 use \src\handlers\UserHandler;
 use \src\models\Addresse;
 use \src\models\Cart;
+use src\models\CartsProduct;
 
 
 class SiteController extends Controller
@@ -235,10 +236,11 @@ class SiteController extends Controller
         $order = (object)$order[0];
 
         $cart[0]->order = $order->idorder;
-        echo '<pre>';
-        print_r($cart);
-        echo '</pre>';
-
+     
+        /*Limpar produtos do carrinho*/
+        if($cart[0]->order != ''){
+            CartHandler::removeAllProductsToCart($cart[0]->idcart);
+        }
 
         $this->render('payment', [
             'cart' => $cart,

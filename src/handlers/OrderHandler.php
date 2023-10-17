@@ -72,7 +72,7 @@ class OrderHandler {
             ->join('addresses', 'orders.idaddress', '=', 'addresses.idaddress')
             ->join('persons', 'users.idperson', '=', 'persons.idperson')
             ->where('idorder', $idOrder)
-        ->get();
+        ->one();
 
         if($data){
             return $data;
@@ -105,6 +105,57 @@ class OrderHandler {
         }
 
         return false;
+    }
+
+    public static function listAll() {
+        
+        $data = Order::select()
+            ->join('ordersstatus','orders.idstatus', '=', 'ordersstatus.idstatus')
+            ->join('carts', 'orders.idcart', '=', 'carts.idcart')
+            ->join('users', 'orders.iduser', '=', 'users.iduser')
+            ->join('addresses', 'orders.idaddress', '=', 'addresses.idaddress')
+            ->join('persons', 'users.idperson', '=', 'persons.idperson')
+            ->orderBy('orders.dtregister','desc')
+        ->get();
+
+        if($data){
+            return $data;
+        }
+
+        return false;
+
+    }
+
+    public static function deleteById($idorder){
+
+        Order::delete()
+            ->where('idorder', $idorder)
+        ->execute();
+
+    }
+
+    public static function getAllOrderStatus(){
+        $data = OrdersStatu::select()->get();
+
+        if(count($data) > 0){
+            return $data;
+        }
+
+        return false;
+    }
+
+    public static function update($order){
+
+        Order::update([
+            'idcart' => $order['idcart'],
+            'iduser' => $order['iduser'],
+            'idstatus' => $order['idstatus'],
+            'idaddress'=> $order['idaddress'],
+            'vltotal' => $order['vltotal']
+        ])
+            ->where('idorder', $order['idorder'])
+        ->execute();
+
     }
 
 }

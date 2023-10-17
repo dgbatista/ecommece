@@ -70,5 +70,12 @@ $router->get('/admin/products/{id}', 'ProductController@update');
 $router->post('/admin/products/{id}', 'ProductController@update');
 $router->get('/admin/products', 'ProductController@index_admin');
 
+/*ORDERS*/
+$router->get('/admin/orders/{idorder}', 'AdminController@order');
+$router->get('/admin/orders/{idorder}/status', 'AdminController@status');
+$router->post('/admin/orders/{idorder}/status', 'AdminController@status');
+$router->get('/admin/orders/{idorder}/delete', 'AdminController@delete');
+$router->get('/admin/orders', 'AdminController@orders');
+
 $router->get('/admin', 'AdminController@index');
 
