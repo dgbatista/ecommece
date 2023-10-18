@@ -9,12 +9,15 @@ use \src\handlers\CartHandler;
 class AdminController extends Controller {
 
     private $loggedUser;
+    private $person;
 
     public function __construct() {
         $this->loggedUser = UserHandler::checkLogin();
         if(UserHandler::checkLogin() === false){
             $this->redirect('/admin/login');
         }     
+
+        $this->person = UserHandler::getUserById($this->loggedUser->iduser);
         
         if($this->loggedUser->inadmin === 0){
             $this->redirect('/');
@@ -23,7 +26,13 @@ class AdminController extends Controller {
     }
     public function index() {
 
-        $this->render('admin/index');
+        $person = UserHandler::getUserById($this->loggedUser->iduser);
+
+        print_r($person);
+
+        $this->render('admin/index', [
+            'user' => $this->person
+        ]);
 
     }    
     public function users(){
@@ -47,11 +56,14 @@ class AdminController extends Controller {
             ]);
         }
 
+        
+
         $this->render('admin/users', [
             'users'=> $pagination['users'],
             'pageActive' => 'users',
             'search' => $search,
-            'pages' => $pages
+            'pages' => $pages,
+            'user' => $this->person
         ]);
     }
 
@@ -66,7 +78,9 @@ class AdminController extends Controller {
         }        
 
         $this->render('admin/orders', [
-            'orders' => $orderObj
+            'orders' => $orderObj,
+            'user' => $this->person,
+            'pageActive' => 'orders',
         ]);
 
     }
@@ -110,7 +124,9 @@ class AdminController extends Controller {
                 'order' => $order,
                 'list_status' => $status,
                 'success' => (isset($sucess)) ? $success :  '',
-                'error' => (isset($error)) ? $error :  ''
+                'error' => (isset($error)) ? $error :  '',
+                'user' => $this->person,
+                'pageActive' => 'orders'
             ]);
         } else {
             $this->redirect('/admin/orders');
@@ -124,16 +140,12 @@ class AdminController extends Controller {
 
         $order = (Object) OrderHandler::getJoinsOrderById($idorder);
 
-        $cart = CartHandler::getFullCart($order->idcart);
-
-        // echo '<pre>';
-        // print_r($cart);
-        // exit;
-
         if($order){
             $this->render('admin/order', [
                 'order' => $order,
-                'products' => []
+                'products' => [],
+                'user' => $this->person,
+                'pageActive' => 'orders'
             ]);
         } else {
             $this->redirect('/admin/orders');

@@ -1,4 +1,7 @@
-<?php $render('admin/header'); ?>
+<?php $render('admin/header',[
+      'user' => $user
+      ]); 
+?>
 
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">

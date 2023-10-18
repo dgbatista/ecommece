@@ -7,9 +7,12 @@ use \src\handlers\UserHandler;
 class UserController extends Controller {
 
     private $loggedUser;
+    private $person;
 
     public function __construct(){
         $this->loggedUser = UserHandler::checkLogin();
+
+        $this->person = UserHandler::getUserById($this->loggedUser->iduser);
 
         if($this->loggedUser && $this->loggedUser->inadmin === 0){
             $this->redirect('/');
@@ -62,11 +65,9 @@ class UserController extends Controller {
     public function userEdit($args){
         $id = $args['id'];
 
-        $user = UserHandler::getUserByID($id);
-
         $this->render('admin/users-edit', [
-            'user' => $user,
-            'pageActive' => $this->pageActive
+            'user' => $this->person,
+            'pageActive' => 'users'
         ]);
     }    
     
@@ -80,7 +81,8 @@ class UserController extends Controller {
         
         $this->render('admin/users-create', [
             'flash' => $flash,
-            'pageActive' => $this->pageActive
+            'pageActive' => 'users',
+            'user' =>$this->person
         ]);
 
     }    

@@ -1,4 +1,4 @@
-<?php $render('admin/header', ['pageActive' => $pageActive]); ?>
+<?php $render('admin/header', ['pageActive' => $pageActive, 'user'=>$user]); ?>
 
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -74,4 +74,4 @@
 </div>
 <!-- /.content-wrapper -->
 
-<?php $render('admin/header'); ?>
+<?php $render('admin/footer'); ?>

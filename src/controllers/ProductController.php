@@ -10,12 +10,15 @@ class ProductController extends Controller {
 
     private $loggedUser;
     private $pageActive = 'products';
+    private $person;
 
     public function __construct() {
         $this->loggedUser = UserHandler::checkLogin();
         if(UserHandler::checkLogin() === false){
             $this->redirect('/login');
         }  
+
+        $this->person = UserHandler::getUserById($this->loggedUser->iduser);
 
         if($this->loggedUser->inadmin === 0){
             $this->redirect('/');
@@ -29,7 +32,8 @@ class ProductController extends Controller {
         if($this->loggedUser && $this->loggedUser->inadmin == true){
             $this->render('admin/products', [
                 'products' => $products,
-                'pageActive' => $this->pageActive
+                'pageActive' => $this->pageActive,
+                'user' => $this->person
             ]);
         }else{
             $this->redirect('/');
@@ -61,7 +65,8 @@ class ProductController extends Controller {
        }       
        
        $this->render('admin/products-create',[
-            'pageActive' => $this->pageActive
+            'pageActive' => $this->pageActive,
+            'user' => $this->person
        ]);       
     }
 
@@ -93,7 +98,8 @@ class ProductController extends Controller {
                 } 
                 $this->render('admin/products-update' , [
                     'product' => $product, 
-                    'pageActive' => $this->pageActive                   
+                    'pageActive' => $this->pageActive,
+                    'user' => $this->person                   
                 ]);
             } else {
                 $this->redirect('/admin/products');

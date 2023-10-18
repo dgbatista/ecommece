@@ -9,12 +9,16 @@ class CategoryController extends Controller {
 
     private $loggedUser;
     private $pageActive = 'categories';
+    private $person;
 
     public function __construct() {
         $this->loggedUser = UserHandler::checkLogin();
         if(UserHandler::checkLogin() === false){
             $this->redirect('/admin/login');
         }        
+
+        $this->person = UserHandler::getUserById($this->loggedUser->iduser);
+
         if($this->loggedUser->inadmin === 0){
             $this->redirect('/');
         } 
@@ -26,7 +30,8 @@ class CategoryController extends Controller {
 
        $this->render('admin/categories', [
         'categories' => $categories,
-        'pageActive' => $this->pageActive
+        'pageActive' => $this->pageActive,
+        'user' => $this->person
        ]);
 
        self::updateFile();
@@ -42,7 +47,8 @@ class CategoryController extends Controller {
        }
        
        $this->render('admin/categories-create',[
-            'pageActive' => $this->pageActive
+            'pageActive' => $this->pageActive,
+            'user' => $this->person
         ]);
 
        self::updateFile();
@@ -65,7 +71,8 @@ class CategoryController extends Controller {
 
                 $this->render('admin/categories-update' , [
                     'category' => $category,
-                    'pageActive' => $this->pageActive
+                    'pageActive' => $this->pageActive,
+                    'user' => $this->person
                 ]);
 
             } else {
@@ -120,7 +127,8 @@ class CategoryController extends Controller {
             'category' => $category,
             'productsNotRelated' => $productsNotRelated,
             'productsRelated' =>  $productsRelated,
-            'pageActive' => $this->pageActive
+            'pageActive' => $this->pageActive,
+            'user' => $this->person
         ]);
     }    
 
