@@ -59,7 +59,7 @@
                                     <?=$product->desproduct?> <strong class="product-quantity">× <?=$product->qtd_products?></strong> 
                                 </td>
                                 <td class="product-total">
-                                    <span class="amount">R$<?=$product->vlprice;?></span>
+                                    <span class="amount">R$<?=number_format(($product->vlprice * $product->qtd_products), 2, ',', '.');?></span>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -67,7 +67,7 @@
                         <tfoot>
                             <tr class="cart-subtotal">
                                 <th>Subtotal</th>
-                                <td><span class="amount"><?=($order->vltotal) ? 'R$ '.$order->vltotal : ''?></span>
+                                <td><span class="amount"><?=($order->vltotal) ? 'R$ '.number_format($order->vltotal, 2, ',', '.') : ''?></span>
                                 </td>
                             </tr>
                             <tr class="shipping">
@@ -83,7 +83,7 @@
                                 <td><strong><span class="amount">
                                     <?php if($order->vltotal): ?>
                                         <span class="amount">                                                        
-                                            R$ <?=($order->vltotal + $order->vlfreight)?>
+                                            R$ <?=number_format(($order->vltotal + $order->vlfreight),2, ',', '.')?>
                                         </span>
                                     <?php endif; ?>
                                 </span></strong> </td>

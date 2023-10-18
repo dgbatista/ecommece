@@ -22,6 +22,16 @@
             
             <div class="box-header">
               <a href="<?=$base;?>/admin/users/create" class="btn btn-success">Cadastrar Usuário</a>
+              <div class="box-tools">
+                <form action="<?=$base;?>/admin/users">
+                  <div class="input-group input-group-sm" style="width: 150px;">
+                    <input type="text" name="search" class="form-control pull-right" placeholder="Search" value="<?=$search?>">
+                    <div class="input-group-btn">
+                      <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                    </div>
+                  </div>
+                </form>
+              </div>
             </div>
 
             <div class="box-body no-padding">
@@ -54,6 +64,13 @@
               </table>
             </div>
             <!-- /.box-body -->
+            <div class="box-footer clearfix">
+              <ul class="pagination pagination-sm no-margin pull-right">
+              <?php foreach ($pages as $item):?>
+                <li><a href="<?=$item['href']?>"><?=$item['text']?></a></li>
+                <?php endforeach;?>
+              </ul>
+            </div>
           </div>
   	</div>
   </div>

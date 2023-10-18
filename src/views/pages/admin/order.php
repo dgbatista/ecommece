@@ -1,5 +1,4 @@
 <?=$render('admin/header');?>
-
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -86,7 +85,7 @@
             <!-- /.col -->
         </div>
         <!-- /.row -->
-    
+ 
         <div class="row">
             <!-- accepted payments column -->
             <div class="col-xs-6">
@@ -121,15 +120,15 @@
                 <table class="table">
                 <tbody><tr>
                     <th style="width:50%">Subtotal:</th>
-                    <td>R${function="format_real($cart.vlsubtotal)"}</td>
+                    <td><?='R$ '.$order->vltotal;?></td>
                 </tr>
                 <tr>
                     <th>Frete:</th>
-                    <td>R${function="format_real($cart.vlfreight)"}</td>
+                    <td><?='R$ '.$order->vlfreight;?></td>
                 </tr>
                 <tr>
                     <th>Total:</th>
-                    <td>R${function="format_real($cart.vltotal)"}</td>
+                    <td><?='R$ '.$order->vltotal;?></td>
                 </tr>
                 </tbody></table>
             </div>
@@ -141,10 +140,10 @@
         <!-- this row will not appear when printing -->
         <div class="row no-print">
             <div class="col-xs-12">
-                <button type="button" onclick="window.location.href = '/admin/orders/{$order.idstatus}/status'" class="btn btn-default pull-left" style="margin-left: 5px;">
+                <button type="button" onclick="window.location.href = '<?=$base;?>/admin/orders/<?=$order->idorder?>/status'" class="btn btn-default pull-left" style="margin-left: 5px;">
                     <i class="fa fa-pencil"></i> Editar Status
                 </button>
-                <button type="button" onclick="window.open('/boleto/{$order.idstatus}')" class="btn btn-default pull-left" style="margin-left: 5px;">
+                <button type="button" onclick="window.open('<?=$base;?>/boleto/<?=$order->idorder;?>')" class="btn btn-default pull-left" style="margin-left: 5px;">
                     <i class="fa fa-barcode"></i> Boleto
                 </button>
 

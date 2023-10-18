@@ -71,7 +71,7 @@ class CartHandler {
         $data = Cart::select()->where('idcart', $idcart)->one();
 
         if($data){
-            $cart = self::transformToObject($data);
+            $cart = self::transformCartToObject($data);
             return $cart;
         }       
         return false;
@@ -111,10 +111,12 @@ class CartHandler {
 
     public static function addProducToCart(Product $product, $idcart){
 
-        CartsProduct::insert([
+        $data = CartsProduct::insert([
             'idcart' => $idcart,
             'idproduct' => $product->idproduct
         ])->execute();
+
+        return $data;
 
     }
 
@@ -148,9 +150,13 @@ class CartHandler {
         ->execute();        
     }
 
-    public static function getProducts(){
+    public static function getProducts($idcart = false){
+        
+        $cart = CartHandler::getFromSession();
 
-        $cart = $_SESSION['cart'];
+        if($idcart != false){
+            $cart->idcart = $idcart;
+        }
 
         if($cart){
             $data = CartsProduct::select()
@@ -296,14 +302,14 @@ class CartHandler {
 
     public static function getFullCart($idcart = false){
         if(!$idcart){
-            $cart = CartHandler::getFromSession();
-            $productsCart = CartHandler::getProducts();
+            $cart = self::getFromSession();
+            $productsCart = self::getProducts();
 
             $cartMerge[] =$cart;
             $cartMerge[] =$productsCart;
         } else {
-            $cart = CartHandler::getFromSession();
-            $productsCart = CartHandler::getProducts();
+            $cart = self::get($idcart);
+            $productsCart = self::getProducts($idcart);
 
             $cartMerge[] =$cart;
             $cartMerge[] =$productsCart;
@@ -314,6 +320,15 @@ class CartHandler {
 
     public static function createNewCart(){
         
+    }
+
+    public static function updateCartProduct(CartsProduct $cartsProduct){
+
+        CartsProduct::update([
+            'idorder' => $cartsProduct->idorder
+        ])->where('idcart', $cartsProduct->idcart)
+        ->execute();
+
     }
 
 }

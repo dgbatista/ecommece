@@ -73,7 +73,7 @@ class AddressHandler {
 
         $address->nrzipcode = self::formatCepBD($address->nrzipcode);
 
-        Addresse::insert([
+        $data = Addresse::insert([
             'idperson' => $idperson ?? 0,
             'desaddress' => $address->desaddress ?: '',
             'desnumber' => $address->desnumber ?: 0,
@@ -85,6 +85,8 @@ class AddressHandler {
             'nrzipcode' => $address->nrzipcode ?: 0
             ])
         ->execute();
+
+        return $data;
 
     }
 

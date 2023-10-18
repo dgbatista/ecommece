@@ -90,4 +90,28 @@ class Insert extends Base
     {
         $this->values = array(); return $this;
     }
+
+    public static function _checkH() 
+    {
+        // Adapta as querys construidas pelo hydrahon ao PDO do php
+        if (self::$_h == null) {
+            $connection = Database::getInstance();
+            self::$_h = new Builder('mysql', function($query, $queryString, $queryParameters) use($connection) {
+                $statement = $connection->prepare($queryString);
+                $statement->execute($queryParameters);
+
+                if ($query instanceof FetchableInterface) {
+                    return $statement->fetchAll(\PDO::FETCH_ASSOC);
+                }
+
+                if ($query instanceof Insert) {
+                    return $connection->lastInsertId();
+                }
+
+                return $statement;
+            });
+        }
+            
+        self::$_h = self::$_h->table( self::getTableName() );
+    }
 }

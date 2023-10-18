@@ -48,7 +48,7 @@ $router->get('/admin/users/{id}/edit', 'UserController@userEdit');
 $router->post('/admin/users/update', 'UserController@update');
 $router->get('/admin/users/create', 'UserController@create');
 $router->post('/admin/users/create', 'UserController@createAction');
-$router->get('/admin/users', 'UserController@index');
+$router->get('/admin/users', 'AdminController@users');
 $router->get('/logout', 'SiteController@logout');
 
 /*CATEGORIES*/
@@ -71,10 +71,10 @@ $router->post('/admin/products/{id}', 'ProductController@update');
 $router->get('/admin/products', 'ProductController@index_admin');
 
 /*ORDERS*/
-$router->get('/admin/orders/{idorder}', 'AdminController@order');
 $router->get('/admin/orders/{idorder}/status', 'AdminController@status');
 $router->post('/admin/orders/{idorder}/status', 'AdminController@status');
 $router->get('/admin/orders/{idorder}/delete', 'AdminController@delete');
+$router->get('/admin/orders/{idorder}', 'AdminController@order');
 $router->get('/admin/orders', 'AdminController@orders');
 
 $router->get('/admin', 'AdminController@index');

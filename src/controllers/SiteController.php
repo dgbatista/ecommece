@@ -191,9 +191,10 @@ class SiteController extends Controller
         $cart = CartHandler::getFullCart();
 
         $userAddress =  AddressHandler::getAddressById($user->idperson);
-        
+
         if(!$userAddress){
             AddressHandler::saveAddress($user->idperson, $address);
+            exit;
         } else {
             AddressHandler::updateAddress($user->idperson, $address);
         }        
@@ -203,13 +204,20 @@ class SiteController extends Controller
 
         $order = OrderHandler::saveOrder($cart, $address);
 
+        if($order){
+            $cartsProduct = new CartsProduct();
+            $cartsProduct->idorder = $order->idorder;
+            $cartsProduct->idcart = $cart[0]->idcart;
+
+            CartHandler::updateCartProduct($cartsProduct);
+        }        
+
         if(!$order){
             $_SESSION['error'] = 'Não foi possível continuar pois o carrinho está vazio !';
             $this->redirect('/checkout');
         }
 
-        //zerar carrinho após finalizado a order
-        
+        //zerar carrinho após finalizado a order        
 
         $this->redirect('/order/'.$order->idorder);
     }
@@ -230,17 +238,18 @@ class SiteController extends Controller
         }
         
         $cart = CartHandler::getFullCart();
+        
         $person = UserHandler::getUserById($this->loggedUser->iduser);
         $order = OrderHandler::getJoinsOrderById($idOrder);
 
-        $order = (object)$order[0];
+        $order = (object)$order;
 
         $cart[0]->order = $order->idorder;
      
         /*Limpar produtos do carrinho*/
-        if($cart[0]->order != ''){
-            CartHandler::removeAllProductsToCart($cart[0]->idcart);
-        }
+        // if($cart[0]->order != ''){
+        //     CartHandler::removeAllProductsToCart($cart[0]->idcart);
+        // }
 
         $this->render('payment', [
             'cart' => $cart,
@@ -261,7 +270,7 @@ class SiteController extends Controller
         }
 
         $order = OrderHandler::getJoinsOrderById($idOrder);
-        $order = (object)$order[0];
+        $order = (object)$order;
         
         // DADOS DO BOLETO PARA O SEU CLIENTE
         $dias_de_prazo_para_pagamento = 10;
@@ -533,12 +542,14 @@ class SiteController extends Controller
         $person = UserHandler::getUserById($this->loggedUser->iduser);
 
         $orders = UserHandler::getOrders($user->iduser);
-        // $orders = (object) $orders;
 
-        foreach($orders as $order){
-            $order['vltotal'] = ProductHandler::formatPrice($order['vltotal']);
-            $orderArray []= (object)$order;
-        }
+        $orderArray = [];
+        if($orders != false){
+            foreach($orders as $order){
+                $order['vltotal'] = ProductHandler::formatPrice($order['vltotal']);
+                $orderArray []= (object)$order;
+            }
+        }        
 
         $orders = $orderArray;
 
@@ -563,7 +574,7 @@ class SiteController extends Controller
 
         $idorder = (int)$args['idorder'];
 
-        $order = (object)OrderHandler::getJoinsOrderById($idorder)[0];
+        $order = (object)OrderHandler::getJoinsOrderById($idorder);
         if(!$order){
             $this->redirect('/profile/orders');
         }

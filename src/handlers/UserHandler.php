@@ -54,14 +54,14 @@ class UserHandler {
     }
 
     public static function getAllUsers(){
-        $userList = User::select()
+        $array = User::select()
             ->join('persons', 'users.idperson', '=' , 'persons.idperson')
             ->orderBy('desperson')
         ->get();
         $users = [];
 
-        if($userList) {
-            foreach($userList as $data){
+        if($array) {
+            foreach($array as $data){
             
                 $user = new User();
                 $user->iduser = $data['iduser'];
@@ -79,6 +79,32 @@ class UserHandler {
             return $users;
         }
         return false;
+    }
+
+    public static function getUserPerPage($page = 1, $perPage = 10){
+
+            $data = User::select()
+                        ->join('persons', 'users.idperson', '=' , 'persons.idperson')
+                        ->orderBy('desperson')
+                        ->page($page, $perPage)
+                    ->get();
+
+            if(count($data) > 0){
+                foreach($data as $user){
+                    $users[] = self::transformArrayToUser($user);
+                }
+            }
+
+            $total =  User::select()->count();
+
+            $pages = ceil($total / $perPage);
+
+            return [
+                'users'=> $users,
+                'total' => $total,
+                'pageCount' => $pages
+            ];
+
     }
 
     public static function validateEmail($email){

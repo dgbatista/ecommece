@@ -12,7 +12,7 @@ class OrderHandler {
         if(isset($cart[1]['freight']['total']) && !empty($cart[1]['freight']['total'])){
             try{
 
-                Order::insert([
+                $id = Order::insert([
                     'idcart' => $cart[0]->idcart,
                     'iduser' => $cart[0]->iduser,
                     'idstatus' => OrdersStatu::EM_ABERTO,
@@ -21,13 +21,12 @@ class OrderHandler {
                 ])->execute();
 
                 $data = Order::select()
-                    ->where('idcart', $cart[0]->idcart)
-                    ->where('iduser' , $cart[0]->iduser)
-                    ->where('vltotal',$cart[1]['freight']['total'])
+                    ->where('idorder', $id)
                 ->one();
 
                 if($data){
-                    $order = self::getOrderById($data['idorder']);
+
+                    $order = self::setOrder($data);
 
                     return $order;
                 }
@@ -41,12 +40,8 @@ class OrderHandler {
         }     
     }
 
-    public static function getOrderById($idOrder){
+    public static function setOrder($data){
 
-        $data = Order::select()
-            ->where('idorder', $idOrder)
-        ->one();
-        
         if($data){
             $order = new Order();
             $order->idorder = $data['idorder'];
@@ -84,14 +79,15 @@ class OrderHandler {
     public static function getJoinsOrderByIdCart($idOrder){
 
         $data = Order::select()
-            ->join('ordersstatus','orders.idstatus', '=', 'ordersstatus.idstatus')
-            ->join('carts', 'orders.idcart', '=', 'carts.idcart')
-            ->join('users', 'orders.iduser', '=', 'users.iduser')
-            ->join('addresses', 'orders.idaddress', '=', 'addresses.idaddress')
-            ->join('persons', 'users.idperson', '=', 'persons.idperson')
-            ->join('cartsproducts', 'carts.idcart', '=', 'cartsproducts.idcart')
-            ->join('products', 'cartsproducts.idproduct', '=', 'products.idproduct')
-            ->where('idorder', $idOrder)
+                ->join('ordersstatus','orders.idstatus', '=', 'ordersstatus.idstatus')
+                ->join('carts', 'orders.idcart', '=', 'carts.idcart')
+                ->join('users', 'orders.iduser', '=', 'users.iduser')
+                ->join('addresses', 'orders.idaddress', '=', 'addresses.idaddress')
+                ->join('persons', 'users.idperson', '=', 'persons.idperson')
+                ->join('cartsproducts', 'carts.idcart', '=', 'cartsproducts.idcart')
+                ->join('products', 'cartsproducts.idproduct', '=', 'products.idproduct')
+                ->groupBy('products.idproduct')
+            ->where('orders.idorder', $idOrder)
         ->get();
 
         if(count($data) > 0){

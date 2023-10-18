@@ -51,10 +51,11 @@ class CartController extends Controller {
         $cart = CartHandler::getFromSession();
         $product = ProductHandler::getProductById($idproduct);
 
+        $cart->cartProducts = [];
         for($q=0;$q<$qtd; $q++){
-            CartHandler::addProducToCart($product, $cart->idcart);     
-        }            
-
+           CartHandler::addProducToCart($product, $cart->idcart);     
+        }      
+        
         $this->redirect('/cart');
 
         self::freight();

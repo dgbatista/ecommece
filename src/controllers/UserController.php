@@ -7,7 +7,6 @@ use \src\handlers\UserHandler;
 class UserController extends Controller {
 
     private $loggedUser;
-    private $pageActive = 'users';
 
     public function __construct(){
         $this->loggedUser = UserHandler::checkLogin();
@@ -38,20 +37,7 @@ class UserController extends Controller {
         ]);
     }
 
-    public function index(){
-        $users = UserHandler::getAllUsers();
-
-        if($this->loggedUser->token && $this->loggedUser->inadmin === 1){
-
-            $this->render('admin/users', [
-                'users'=> $users,
-                'pageActive' => $this->pageActive
-            ]);
-            
-        } else {
-            $this->redirect('/admin/login');
-        }
-    }
+    
 
     public function signin_action(){
         $login = filter_input(INPUT_POST, 'login');

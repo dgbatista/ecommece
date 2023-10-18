@@ -45,7 +45,6 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php //echo '<pre>'; print_r($products); ?>
                                     
                                     <?php foreach($cart[1]['carts'] as $product):?>                                        
                                         <tr class="cart_item">

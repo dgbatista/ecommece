@@ -70,3 +70,4 @@ $insert->execute();
 ```
 
 [~ PHPDoc](/src/Query/Sql/Insert.php#resetValues)
+
